@@ -22944,5 +22944,48 @@ body.playing .homebtn{touch-action:manipulation;}
   body.playing .chatfab{width:clamp(27px,7.1vw,31px);height:clamp(27px,7.1vw,31px);min-width:clamp(27px,7.1vw,31px);}
 }
 </style>
+<style id="kd-bottom-strip-fix">
+/* ============================================================
+   BOTTOM STRIP FIX (final override — placed last so it wins) —
+   on the phone, a plain cream band appeared along the very
+   bottom of the title screen (and could show under the main
+   menu), below the dark dragon art. Cause, two layers deep:
+   1 · CANVAS COLOUR. The strip was the page canvas showing
+      through, and the canvas takes the body's background —
+      which in the light theme is cream (#ece0c3), while the
+      title/menu screens are near-black navy. Any patch of
+      screen not covered by the dark art therefore flashed
+      cream. (In the dark theme the same gap is navy, which is
+      why the band only showed in light mode.)
+   2 · THE GAP ITSELF. The anti-shake fix sized the menu to
+      svh — the SMALL viewport height, with the browser
+      toolbars shown. When Safari's chrome retracts, the
+      visible screen grows toward the large viewport height,
+      leaving a real uncovered band under svh-sized/fixed
+      layers. svh was right for the in-flow layout (it is
+      constant, so nothing reflowing can restart the shake),
+      but the full-screen BACKDROPS can safely use lvh: the
+      large viewport height is every bit as constant as svh
+      (only dvh moves), and these layers are fixed, out of
+      flow, so their size drives no layout feedback at all.
+   Fix: while the title screen or the main menu itself is
+   the visible screen, the canvas is painted the screens'
+   own navy, and the title screen + menu backdrop art are
+   stretched to 100lvh so the art itself — not just a flat
+   colour — reaches the physical bottom of the screen in
+   either toolbar state. Light-theme sub-screens (About,
+   Learn, setup…) keep their cream page: there the canvas
+   colour already matches the page, so no band can show.
+   ============================================================ */
+/* 1 · dark canvas under the dark screens */
+body.title-open{background:#05070f;}
+body.show-menu:not(.show-about):not(.show-learn):not(.show-online):not(.show-offline):not(.show-custom):not(.show-setup):not(.show-shop):not(.show-tournaments){background:#05070f;}
+html:has(body.title-open){background:#05070f;}
+html:has(body.show-menu:not(.show-about):not(.show-learn):not(.show-online):not(.show-offline):not(.show-custom):not(.show-setup):not(.show-shop):not(.show-tournaments)){background:#05070f;}
+/* 2 · backdrop art reaches the large-viewport bottom */
+.title-screen{height:100vh;height:100lvh;}
+body.show-menu:not(.show-about):not(.show-learn)::before,
+body.show-menu:not(.show-about):not(.show-learn)::after{height:100vh;height:100lvh;bottom:auto;}
+</style>
 </body>
 </html>
