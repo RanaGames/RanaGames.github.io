@@ -1982,17 +1982,26 @@ html.reduce-motion .pm-particles{display:none;}
    Applies only while the main menu itself is the visible screen
    (not About / Learn / Online / Offline / Custom / Setup / Shop,
    which keep their normal scrolling). Every menu entry and control
-   stays in place and tappable; the fit comes from dvh-clamped
+   stays in place and tappable; the fit comes from svh-clamped
    sizing, tighter gaps, and a flex column whose options area
    distributes its slack instead of overflowing. Extremely short
    viewports scale the whole menu stack down rather than clipping
    the fixed bottom nav or scrolling.
+   HEIGHT UNIT: svh (small viewport height), NOT dvh. dvh tracks
+   the phone browser's collapsing/expanding toolbars, so at launch
+   every dvh-sized piece of this screen reflowed each time the
+   toolbar toggled — and the reflow re-toggled the toolbar, a
+   feedback loop that made the whole screen shake up and down.
+   svh is fixed at the with-toolbar height and never moves when
+   the chrome shows or hides, so the layout is stable from the
+   first frame. (In the full-screen home-screen app svh, dvh and
+   vh are the same height, so nothing changes there.)
    ============================================================ */
 body.show-menu:not(.show-about):not(.show-learn):not(.show-online):not(.show-offline):not(.show-custom):not(.show-setup):not(.show-shop):not(.show-tournaments){
-  height:100dvh;max-height:100dvh;overflow:hidden;
+  height:100vh;height:100svh;max-height:100vh;max-height:100svh;overflow:hidden;
 }
 body.show-menu:not(.show-about):not(.show-learn):not(.show-online):not(.show-offline):not(.show-custom):not(.show-setup):not(.show-shop):not(.show-tournaments) .wrap{
-  height:100dvh;max-height:100dvh;overflow:hidden;display:flex;flex-direction:column;
+  height:100vh;height:100svh;max-height:100vh;max-height:100svh;overflow:hidden;display:flex;flex-direction:column;
   padding:6px 12px 0;
 }
 body.show-menu:not(.show-about):not(.show-learn):not(.show-online):not(.show-offline):not(.show-custom):not(.show-setup):not(.show-shop):not(.show-tournaments) .online-corner{
@@ -2006,61 +2015,61 @@ body.show-menu:not(.show-about):not(.show-learn):not(.show-online):not(.show-off
   flex:0 0 auto;margin-bottom:2px;
 }
 body.show-menu:not(.show-about):not(.show-learn):not(.show-online):not(.show-offline):not(.show-custom):not(.show-setup):not(.show-shop):not(.show-tournaments) .pc-avatar{
-  width:clamp(30px,4.6dvh,38px);height:clamp(30px,4.6dvh,38px);font-size:clamp(16px,2.6dvh,21px);
+  width:clamp(30px,4.6svh,38px);height:clamp(30px,4.6svh,38px);font-size:clamp(16px,2.6svh,21px);
 }
 body.show-menu:not(.show-about):not(.show-learn):not(.show-online):not(.show-offline):not(.show-custom):not(.show-setup):not(.show-shop):not(.show-tournaments) .radiobar{
-  flex:0 0 auto;margin:2px 0;padding:clamp(3px,.7dvh,5px) 7px;
+  flex:0 0 auto;margin:2px 0;padding:clamp(3px,.7svh,5px) 7px;
 }
 body.show-menu:not(.show-about):not(.show-learn):not(.show-online):not(.show-offline):not(.show-custom):not(.show-setup):not(.show-shop):not(.show-tournaments) .radio-nav{
-  width:clamp(24px,3.8dvh,30px);height:clamp(24px,3.8dvh,30px);
+  width:clamp(24px,3.8svh,30px);height:clamp(24px,3.8svh,30px);
 }
 body.show-menu:not(.show-about):not(.show-learn):not(.show-online):not(.show-offline):not(.show-custom):not(.show-setup):not(.show-shop):not(.show-tournaments) .radio-name{
-  font-size:clamp(13px,2.1dvh,15px);
+  font-size:clamp(13px,2.1svh,15px);
 }
 body.show-menu:not(.show-about):not(.show-learn):not(.show-online):not(.show-offline):not(.show-custom):not(.show-setup):not(.show-shop):not(.show-tournaments) .radiobar .musicbtn{
-  width:clamp(26px,4dvh,32px);height:clamp(26px,4dvh,32px);
+  width:clamp(26px,4svh,32px);height:clamp(26px,4svh,32px);
 }
 body.show-menu:not(.show-about):not(.show-learn):not(.show-online):not(.show-offline):not(.show-custom):not(.show-setup):not(.show-shop):not(.show-tournaments) .menu-hero{
   flex:0 0 auto;padding:2px 0 2px;
 }
 body.show-menu:not(.show-about):not(.show-learn):not(.show-online):not(.show-offline):not(.show-custom):not(.show-setup):not(.show-shop):not(.show-tournaments) .hero-emblem{
-  gap:clamp(8px,1.6dvh,16px);margin-bottom:0;
+  gap:clamp(8px,1.6svh,16px);margin-bottom:0;
 }
 body.show-menu:not(.show-about):not(.show-learn):not(.show-online):not(.show-offline):not(.show-custom):not(.show-setup):not(.show-shop):not(.show-tournaments) .hero-crown{
-  font-size:clamp(26px,5.6dvh,52px);
+  font-size:clamp(26px,5.6svh,52px);
 }
 body.show-menu:not(.show-about):not(.show-learn):not(.show-online):not(.show-offline):not(.show-custom):not(.show-setup):not(.show-shop):not(.show-tournaments) .title-die{
-  width:clamp(26px,4.8dvh,46px);height:clamp(26px,4.8dvh,46px);font-size:clamp(15px,2.8dvh,25px);border-radius:clamp(8px,1.4dvh,12px);
+  width:clamp(26px,4.8svh,46px);height:clamp(26px,4.8svh,46px);font-size:clamp(15px,2.8svh,25px);border-radius:clamp(8px,1.4svh,12px);
 }
 body.show-menu:not(.show-about):not(.show-learn):not(.show-online):not(.show-offline):not(.show-custom):not(.show-setup):not(.show-shop):not(.show-tournaments) #mainMenu .menu-title{
   font-size:clamp(30px,10.5vw,58px);line-height:1.04;
 }
 body.show-menu:not(.show-about):not(.show-learn):not(.show-online):not(.show-offline):not(.show-custom):not(.show-setup):not(.show-shop):not(.show-tournaments) #mainMenu .menu-tag{
-  font-size:clamp(10px,1.8dvh,13.5px);padding-bottom:clamp(4px,.9dvh,9px);margin-top:clamp(3px,.7dvh,7px);
+  font-size:clamp(10px,1.8svh,13.5px);padding-bottom:clamp(4px,.9svh,9px);margin-top:clamp(3px,.7svh,7px);
 }
 body.show-menu:not(.show-about):not(.show-learn):not(.show-online):not(.show-offline):not(.show-custom):not(.show-setup):not(.show-shop):not(.show-tournaments) .menu-opts{
   flex:1 1 auto;min-height:0;justify-content:space-evenly;
 }
 body.show-menu:not(.show-about):not(.show-learn):not(.show-online):not(.show-offline):not(.show-custom):not(.show-setup):not(.show-shop):not(.show-tournaments) .g-opts{
-  gap:clamp(5px,1dvh,9px);margin-top:clamp(4px,1dvh,14px);
+  gap:clamp(5px,1svh,9px);margin-top:clamp(4px,1svh,14px);
 }
 body.show-menu:not(.show-about):not(.show-learn):not(.show-online):not(.show-offline):not(.show-custom):not(.show-setup):not(.show-shop):not(.show-tournaments) .gbtn{
-  padding:clamp(7px,1.5dvh,13px) 14px;min-height:44px;
+  padding:clamp(7px,1.5svh,13px) 14px;min-height:44px;
 }
 body.show-menu:not(.show-about):not(.show-learn):not(.show-online):not(.show-offline):not(.show-custom):not(.show-setup):not(.show-shop):not(.show-tournaments) .g-icon{
-  width:clamp(32px,5.4dvh,42px);height:clamp(32px,5.4dvh,42px);font-size:clamp(16px,2.6dvh,21px);
+  width:clamp(32px,5.4svh,42px);height:clamp(32px,5.4svh,42px);font-size:clamp(16px,2.6svh,21px);
 }
 body.show-menu:not(.show-about):not(.show-learn):not(.show-online):not(.show-offline):not(.show-custom):not(.show-setup):not(.show-shop):not(.show-tournaments) .g-title{
-  font-size:clamp(15px,2.5dvh,19px);
+  font-size:clamp(15px,2.5svh,19px);
 }
 body.show-menu:not(.show-about):not(.show-learn):not(.show-online):not(.show-offline):not(.show-custom):not(.show-setup):not(.show-shop):not(.show-tournaments) .g-sub{
-  font-size:clamp(10.5px,1.7dvh,12px);
+  font-size:clamp(10.5px,1.7svh,12px);
 }
 body.show-menu:not(.show-about):not(.show-learn):not(.show-online):not(.show-offline):not(.show-custom):not(.show-setup):not(.show-shop):not(.show-tournaments) .g-halfrow .gbtn{
-  padding:clamp(6px,1.1dvh,11px) 12px;min-height:44px;
+  padding:clamp(6px,1.1svh,11px) 12px;min-height:44px;
 }
 body.show-menu:not(.show-about):not(.show-learn):not(.show-online):not(.show-offline):not(.show-custom):not(.show-setup):not(.show-shop):not(.show-tournaments) .g-halfrow .g-icon{
-  width:clamp(28px,4.4dvh,34px);height:clamp(28px,4.4dvh,34px);
+  width:clamp(28px,4.4svh,34px);height:clamp(28px,4.4svh,34px);
 }
 body.show-menu:not(.show-about):not(.show-learn):not(.show-online):not(.show-offline):not(.show-custom):not(.show-setup):not(.show-shop):not(.show-tournaments) .bottomnav{
   padding-top:4px;
@@ -2069,7 +2078,7 @@ body.show-menu:not(.show-about):not(.show-learn):not(.show-online):not(.show-off
   padding:4px 2px;min-height:44px;justify-content:center;
 }
 body.show-menu:not(.show-about):not(.show-learn):not(.show-online):not(.show-offline):not(.show-custom):not(.show-setup):not(.show-shop):not(.show-tournaments) .bn-icon{
-  font-size:clamp(17px,2.6dvh,20px);
+  font-size:clamp(17px,2.6svh,20px);
 }
 /* extremely short viewports: scale the whole menu stack down rather
    than clipping the bottom nav or letting the page scroll */
@@ -2599,7 +2608,7 @@ body.playing header.top,body.playing .utilrow{border-radius:12px;}
 #mainMenu .menu-tag .tag-line{flex:0 1 34px;height:1px;background:linear-gradient(90deg,transparent,rgba(246,215,118,.55),transparent);}
 /* --- three small flat dark buttons --- */
 #mainMenu .g-trirow{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
-#mainMenu .g-trirow .gbtn{flex-direction:column;align-items:center;justify-content:center;gap:5px;text-align:center;padding:clamp(6px,1.2dvh,10px) 6px;min-height:clamp(54px,8.6dvh,66px);}
+#mainMenu .g-trirow .gbtn{flex-direction:column;align-items:center;justify-content:center;gap:5px;text-align:center;padding:clamp(6px,1.2svh,10px) 6px;min-height:clamp(54px,8.6svh,66px);}
 #mainMenu .g-trirow .g-icon{width:clamp(30px,5dvh,36px);height:clamp(30px,5dvh,36px);font-size:clamp(15px,2.4dvh,18px);}
 #mainMenu .g-trirow .g-title{font-size:clamp(11px,1.9dvh,13px);letter-spacing:.04em;}
 .shopdot{position:absolute;top:-4px;right:-4px;width:11px;height:11px;border-radius:50%;background:#e5484d;border:2px solid #0d1428;}
@@ -21725,7 +21734,7 @@ body.title-open{overflow:hidden;}
 .ts-title{margin:14px 0 0;font-family:"Cinzel Decorative","Cinzel","Playfair Display",Georgia,serif;font-size:clamp(40px,11.5vw,70px);font-weight:900;text-transform:uppercase;letter-spacing:.015em;line-height:1.04;background:linear-gradient(180deg,#fff6c8 0%,#f6d776 34%,#c9a227 52%,#8a6d1b 68%,#f2d06b 88%,#ffe98a 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;filter:drop-shadow(0 3px 3px rgba(0,0,0,.75)) drop-shadow(0 0 24px rgba(232,193,90,.30));animation:tsRise .7s cubic-bezier(.33,1,.68,1) .08s both;}
 .ts-title span{background:linear-gradient(180deg,#fff6c8 0%,#f6d776 34%,#c9a227 52%,#8a6d1b 68%,#f2d06b 88%,#ffe98a 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;}
 .ts-tag{margin:12px 0 0;color:#e8c15a;font-family:"Cinzel",Georgia,serif;font-size:clamp(11.5px,3.4vw,14.5px);font-weight:800;letter-spacing:.34em;text-indent:.34em;text-transform:uppercase;text-shadow:0 1px 8px rgba(0,0,0,.85);animation:tsRise .7s cubic-bezier(.33,1,.68,1) .16s both;}
-.ts-play{margin-top:clamp(30px,6dvh,46px);border:1.5px solid #7a5f10;cursor:pointer;min-height:64px;padding:16px 46px;border-radius:14px;background:linear-gradient(180deg,#ffe98a 0%,#e8c15a 38%,#c9a227 68%,#9a7b1e 100%);color:#241a02;font-family:"Cinzel",Georgia,serif;font-size:clamp(19px,5.4vw,23px);font-weight:900;letter-spacing:.05em;text-transform:uppercase;box-shadow:0 10px 26px rgba(184,145,42,.40),inset 0 1px 0 rgba(255,255,255,.8);animation:tsRise .7s cubic-bezier(.33,1,.68,1) .24s both,tsPlayPulse 2.4s ease-in-out .95s infinite;}
+.ts-play{margin-top:clamp(30px,6svh,46px);border:1.5px solid #7a5f10;cursor:pointer;min-height:64px;padding:16px 46px;border-radius:14px;background:linear-gradient(180deg,#ffe98a 0%,#e8c15a 38%,#c9a227 68%,#9a7b1e 100%);color:#241a02;font-family:"Cinzel",Georgia,serif;font-size:clamp(19px,5.4vw,23px);font-weight:900;letter-spacing:.05em;text-transform:uppercase;box-shadow:0 10px 26px rgba(184,145,42,.40),inset 0 1px 0 rgba(255,255,255,.8);animation:tsRise .7s cubic-bezier(.33,1,.68,1) .24s both,tsPlayPulse 2.4s ease-in-out .95s infinite;}
 .ts-play:active{transform:translateY(1px);}
 .ts-foot{margin:26px 0 0;color:rgba(247,242,223,.78);font-size:13px;font-weight:650;text-shadow:0 1px 6px rgba(0,0,0,.8);animation:tsRise .7s cubic-bezier(.33,1,.68,1) .32s both;}
 @keyframes tsRise{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
