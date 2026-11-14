@@ -3282,37 +3282,22 @@ html.comp-reduce .nx-cat,html.comp-reduce .nx-mode,html.comp-reduce .nx-opp,html
 @media (prefers-reduced-motion: reduce){ .nx-cat,.nx-mode,.nx-opp,#nxStartBtn,.nx-iconbtn{transition:none !important;} }
 
 /* ============================================================
-   MATCH CHAT STRIP — the bottom info/instruction banner panel
-   ("Tap a die — it will say which piece to move" + the die list)
-   is gone from the match screen; the space it freed is now the
-   always-visible in-match chat strip, fed by the same CHAT.msgs
-   and sendChat() channel as the room-chat drawer. The strip has
-   NO header label row (the "MATCH CHAT — …" line was removed to
-   free vertical space — the input placeholder still says where
-   a message goes). The board formula below is only a pre-JS
-   fallback: fitBoardToScreen() measures the column's real
-   contents on the device in use and sizes the board to whatever
-   height is actually left, so the whole match — chat input and
-   Send included — fits one screen at any screen size. Hard
-   announcements that used to ride the banner fold into the
-   one-line status under the turn chips.
+   The always-visible in-match chat strip that used to sit under
+   the dice tray is GONE from the match screen — the whole panel
+   (message list + Message input + Send) was removed to free the
+   bottom of the screen. Match chat itself is unchanged: it lives
+   in the chat drawer (top-row chat button / board bubble), fed by
+   the same CHAT.msgs and sendChat() channel. fitBoardToScreen()
+   measures the column's real contents on the device in use and
+   sizes the board to whatever height is actually left, so the
+   whole match fits one screen at any screen size. Hard
+   announcements fold into the one-line status under the turn
+   chips.
    ============================================================ */
-.matchchat{display:none;}
-body.playing .matchchat{display:flex;flex-direction:column;gap:3px;order:5;flex:0 0 auto;width:100%;margin-top:5px;padding:5px 8px 6px;background:linear-gradient(180deg,#131f3d,#0b1120);border:1.5px solid rgba(201,162,39,.55);border-radius:13px;box-shadow:inset 0 1px 0 rgba(255,255,255,.08);}
-.striplist{height:31px;overflow-y:auto;display:flex;flex-direction:column;gap:1px;padding:2px 4px;border-radius:8px;background:rgba(3,6,16,.45);scroll-behavior:smooth;touch-action:pan-y;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;}
-.stripempty{font-size:12px;color:#8b93a8;text-align:center;padding-top:6px;}
-.stripmsg{font-size:12.5px;line-height:1.3;color:#e8e4d2;word-break:break-word;}
-.stripmsg b{color:#ffe98a;font-weight:800;margin-right:4px;}
-.stripmsg.mine b{color:#7db4ff;}
-.stripinputrow{display:flex;gap:6px;}
-.stripinputrow input{flex:1;min-width:0;font-size:13.5px;padding:7px 10px;border-radius:9px;border:1px solid var(--line-strong);background:var(--panel-2);color:var(--ink);}
-.stripinputrow input:focus{border-color:var(--gold-bright);outline:none;}
-.stripinputrow button{border:1px solid #8a6d1b;background:linear-gradient(180deg,#f6d776,#d4a017);color:#171106;font-size:13px;font-weight:800;padding:7px 14px;border-radius:9px;cursor:pointer;white-space:nowrap;}
-.stripinputrow button:disabled,.stripinputrow input:disabled{opacity:.42;cursor:not-allowed;}
 /* the folded one-line status in the turn banner area */
 body.playing .playstatus #statusMsg{display:block !important;font-size:12px;line-height:1.35;margin-top:3px;min-height:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--ink-soft);}
 body.playing .playstatus #statusMsg b{color:var(--ink);}
-/* fallback board size (strip header row gone); fitBoardToScreen() fine-tunes it live */
+/* fallback board size (chat strip gone); fitBoardToScreen() fine-tunes it live */
 body.playing .boardframe{width:min(calc(100vw - 12px),calc(100dvh - 404px));}
 
 /* ============================================================
@@ -3885,13 +3870,6 @@ html.comp-reduce .board.shuffle-reveal .piece,html.comp-reduce .board.shuffle-re
           <span class="dockhint" id="dockHint">Hit Roll — your dice land here</span>
         </div>
         <button class="rollbtn" id="rollBtn" type="button">Roll 3 dice</button>
-      </div>
-      <div class="matchchat" id="matchChatStrip" aria-label="Match chat">
-        <div class="striplist" id="stripChatList"><div class="stripempty">No messages yet.</div></div>
-        <div class="stripinputrow">
-          <input id="stripChatInput" type="text" maxlength="300" placeholder="Message…" autocomplete="off" />
-          <button id="stripChatSend" type="button">Send</button>
-        </div>
       </div>
       <div class="playstatus">
         <div class="statusline">
@@ -9246,7 +9224,6 @@ function renderChat(){
     });
   }
   list.scrollTop = list.scrollHeight;
-  renderStripChat();
   updateChatUI();
 }
 function updateChatUI(){
@@ -9284,71 +9261,7 @@ function updateChatUI(){
   var fab = document.getElementById("chatFab");
   if (fab) fab.classList.toggle("on", !!t && document.body.classList.contains("playing") && !CHAT.open);
   if (!t && CHAT.open) closeChatDrawer();
-  if (typeof updateStripChatUI==="function") updateStripChatUI();
   if (typeof updateQuickChatUI==="function") updateQuickChatUI();
-}
-/* ---------- in-match chat strip (always visible under the dice dock) ----------
-   A second surface on the SAME match chat as the drawer: it renders the
-   same CHAT.msgs and sends through sendChat(), so the strip, the drawer
-   and the corner bubble always show one conversation. In games with no
-   live opponent (Vs Computer, turn-code) it follows Quick Chat's honest
-   rule: the message is kept on this device only, credited like a local
-   quick chat, and the strip is labelled "on-device only". */
-function renderStripChat(){
-  var list = document.getElementById("stripChatList");
-  if (!list) return;
-  list.innerHTML = "";
-  if (!CHAT.msgs.length){
-    var empty = document.createElement("div");
-    empty.className = "stripempty";
-    empty.textContent = "No messages yet.";
-    list.appendChild(empty);
-  } else {
-    CHAT.msgs.slice(-40).forEach(function(m){
-      var row = document.createElement("div");
-      row.className = "stripmsg" + (m.mine ? " mine" : "");
-      var who = document.createElement("b");
-      who.textContent = (m.mine && !m.local ? "You" : m.name) + ":";
-      var txt = document.createElement("span");
-      txt.textContent = m.text; // textContent only — chat text is never rendered as HTML
-      row.appendChild(who); row.appendChild(txt);
-      list.appendChild(row);
-    });
-  }
-  list.scrollTop = list.scrollHeight;
-}
-function updateStripChatUI(){
-  // No header label on the strip (removed to free vertical space);
-  // the input placeholder still says where the message goes.
-  var inp = document.getElementById("stripChatInput"), send = document.getElementById("stripChatSend");
-  if (!inp || !send) return;
-  var t = chatTransport(), ready = chatReady();
-  if (t==="srv" || t==="p2p"){
-    inp.placeholder = "Message your opponent…";
-    inp.disabled = !ready; send.disabled = !ready;
-  } else if (t==="local"){
-    inp.placeholder = "Message (stays on this device)…";
-    inp.disabled = false; send.disabled = false;
-  } else {
-    inp.placeholder = "Message (stays on this device)…";
-    inp.disabled = false; send.disabled = false;
-  }
-}
-function sendStripChat(raw){
-  var text = String(raw == null ? "" : raw).trim().slice(0, CHAT_MAX);
-  if (!text) return;
-  var t = chatTransport();
-  if (!t){
-    // No live connection in this match (Vs Computer / turn-code game):
-    // nothing is sent anywhere — same honest rule as Quick Chat. The
-    // message stays on this screen and in the session chat history.
-    var col = quickLocalCol();
-    CHAT.msgs.push({ name: chatNameFor(col), text: text, time: Date.now(), mine: true, local: true });
-    renderChat();
-    if (typeof showChatBubble==="function") showChatBubble(bubbleNameFor(col), text, col);
-    return;
-  }
-  sendChat(text);
 }
 function openChatDrawer(){
   if (typeof closeQuickPanel==="function") closeQuickPanel();
@@ -10009,29 +9922,14 @@ document.getElementById("chatInput").addEventListener("keydown", function(e){
     this.value = "";
   }
 });
-document.getElementById("stripChatSend").addEventListener("click", function(){
-  var inp = document.getElementById("stripChatInput");
-  sendStripChat(inp.value);
-  inp.value = "";
-  try{ inp.focus({ preventScroll:true }); }catch(e){}
-});
-document.getElementById("stripChatInput").addEventListener("keydown", function(e){
-  if (e.key === "Enter"){
-    e.preventDefault();
-    sendStripChat(this.value);
-    this.value = "";
-  }
-});
-renderStripChat();
-updateStripChatUI();
 /* ---------- responsive board fit ----------
    The match column is a fixed-height flex stack and the board is
    its only flexible piece. Instead of guessing one height formula
    for every phone, measure what the rest of the column actually
    takes on THIS device and size the board to the smaller of the
    width available and the height left over — so the whole match
-   (player bars, dice tray, chat messages, chat input + Send,
-   status line) fits one screen at any screen size, and re-fits
+   (player bars, dice tray, status line) fits one screen at any
+   screen size, and re-fits
    on rotation, browser-toolbar changes, the on-screen keyboard,
    and whenever a sibling in the column appears or disappears
    (End Turn button, match clocks, move callout, team panel). */
@@ -21844,8 +21742,8 @@ body.board-fs-on #boardStage .boardframe{flex:0 0 auto;}
    target, one tap exits via the same .board-fs-toggle wiring. */
 body.board-fs-active #boardFsExitFloat{display:block;position:fixed;top:auto;bottom:calc(10px + env(safe-area-inset-bottom));right:12px;z-index:97;border:1.5px solid #c9a227;background:rgba(10,15,30,.94);color:#f6d776;font-size:12.5px;font-weight:800;padding:10px 14px;min-height:42px;border-radius:999px;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.55);}
 @media (orientation:landscape) and (max-height:560px){
-  #boardStage:fullscreen .playstatus,#boardStage:fullscreen .matchchat,#boardStage:fullscreen .utilrow,
-  body.board-fs-on #boardStage .playstatus,body.board-fs-on #boardStage .matchchat,body.board-fs-on #boardStage .utilrow{display:none !important;}
+  #boardStage:fullscreen .playstatus,#boardStage:fullscreen .utilrow,
+  body.board-fs-on #boardStage .playstatus,body.board-fs-on #boardStage .utilrow{display:none !important;}
   #boardStage:fullscreen .boardframe,body.board-fs-on #boardStage .boardframe{width:min(calc(100vw - 24px),calc(100dvh - 208px));}
   body.board-fs-active #boardFsExitFloat{display:block;}
 }
