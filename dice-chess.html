@@ -22879,5 +22879,61 @@ body.board-fs-active #boardFsExitFloat{display:block;position:fixed;top:auto;bot
   body.playing .boardframe{width:min(calc(100vw - 12px),max(320px,calc(100dvh - 264px)));min-width:min(320px,calc(100vw - 12px));}
 }
 </style>
+<style id="kd-topbar-tap-fix">
+/* ============================================================
+   TOP BAR TAP FIX (final override — placed last so it wins) —
+   the match header (back · KINGS & DICE · trophies / ranks /
+   sound / settings / fullscreen / radio / voice / chat) could
+   not be tapped on the phone for two stacked reasons:
+   1 · STATUS BAR OVERLAP. The page runs viewport-fit=cover and,
+      installed on the home screen, the iOS status bar style is
+      black-translucent — the clock, signal, wifi and battery
+      are drawn OVER the web content, and the header sat at the
+      very top of the screen (6–8px padding), i.e. right under
+      them: the time printed across the title, the battery and
+      wifi across the right-hand icons, and taps in that strip
+      never reached the buttons. Fix: every top-of-screen layout
+      gets env(safe-area-inset-top) added to its top padding, so
+      the first row starts BELOW the status bar / notch. Where
+      there is no inset (desktop, normal browser tab) the inset
+      is 0 and nothing moves. The board gives the inset back out
+      of its height allowance so the no-scroll fit is kept.
+   2 · TITLE OVERFLOW ATE THE NEIGHBOURS. The centred brand name
+      is nowrap in a wide decorative face; at phone widths it is
+      wider than the flex space left between the back button and
+      the icon cluster, so it painted — and tap-blocked — across
+      both. Fix: the brand lockup is pointer-events:none (it has
+      no controls of its own, so taps now pass through it), it
+      can shrink and clip inside its own box instead of spilling
+      over the buttons, the back button and the icon cluster are
+      flex-fixed above it, and on narrow screens the title and
+      icons scale with the viewport width so the whole row fits
+      on one line at 390px and 360px alike.
+   ============================================================ */
+/* 1 · clear the status bar / notch on every top-of-screen layout */
+body.playing .wrap{padding-top:calc(8px + env(safe-area-inset-top,0px));}
+body.show-menu .wrap{padding-top:calc(6px + env(safe-area-inset-top,0px)) !important;}
+body.show-setup .wrap,body.show-shop .wrap,body.show-about .wrap,body.show-learn .wrap,
+body.show-online .wrap,body.show-offline .wrap,body.show-custom .wrap,body.show-tournaments .wrap,
+body.show-nxplay .wrap,body.show-nxfriends .wrap{padding-top:calc(10px + env(safe-area-inset-top,0px)) !important;}
+@media (max-width:700px){
+  body.playing .boardframe{width:min(calc(100vw - 12px),calc(100dvh - 264px - env(safe-area-inset-top,0px)));}
+}
+/* 2 · the title can never cover or block the top options again */
+body.playing header.top{position:relative;z-index:30;}
+body.playing .brandlock{pointer-events:none;min-width:0;overflow:hidden;}
+body.playing .homebtn{position:relative;z-index:2;flex:0 0 auto;}
+body.playing .gameicons{position:relative;z-index:2;flex:0 0 auto;}
+body.playing .giconbtn,body.playing .chatfab{flex:0 0 auto;touch-action:manipulation;}
+body.playing .homebtn{touch-action:manipulation;}
+@media (max-width:560px){
+  body.playing header.top{gap:5px;padding:5px 6px;}
+  body.playing header.top h1{font-size:clamp(10.5px,3.15vw,14px);letter-spacing:.03em;}
+  body.playing .homebtn{width:32px;height:32px;min-width:32px;}
+  body.playing .gameicons{gap:3px;}
+  body.playing .giconbtn{width:clamp(27px,7.1vw,31px);height:clamp(27px,7.1vw,31px);}
+  body.playing .chatfab{width:clamp(27px,7.1vw,31px);height:clamp(27px,7.1vw,31px);min-width:clamp(27px,7.1vw,31px);}
+}
+</style>
 </body>
 </html>
