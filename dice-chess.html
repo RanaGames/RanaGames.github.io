@@ -3299,6 +3299,13 @@ html.comp-reduce .nx-cat,html.comp-reduce .nx-mode,html.comp-reduce .nx-opp,html
    ============================================================ */
 .matchchat{display:none;}
 body.playing .matchchat{display:flex;flex-direction:column;gap:3px;order:5;flex:0 0 auto;width:100%;margin-top:5px;padding:5px 8px 6px;background:linear-gradient(180deg,#131f3d,#0b1120);border:1.5px solid rgba(201,162,39,.55);border-radius:13px;box-shadow:inset 0 1px 0 rgba(255,255,255,.08);}
+/* Typed match chat is ONLINE multiplayer only (owner ruling): in Vs
+   Computer games and same-device 2 Players games there is no remote
+   opponent to type to, so the strip never takes screen space there.
+   fitBoardToScreen() skips display:none children when it measures the
+   column, so the board reclaims the freed height and the End Turn
+   button stays on screen. JS toggles body.no-stripchat from the mode. */
+body.no-stripchat .matchchat{display:none !important;}
 .striplist{height:31px;overflow-y:auto;display:flex;flex-direction:column;gap:1px;padding:2px 4px;border-radius:8px;background:rgba(3,6,16,.45);scroll-behavior:smooth;touch-action:pan-y;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;}
 .stripempty{font-size:12px;color:#8b93a8;text-align:center;padding-top:6px;}
 .stripmsg{font-size:12.5px;line-height:1.3;color:#e8e4d2;word-break:break-word;}
@@ -9317,7 +9324,18 @@ function renderStripChat(){
   }
   list.scrollTop = list.scrollHeight;
 }
+/* The typed match-chat strip is ONLINE multiplayer only (owner ruling):
+   shown in Live matches (server or Friend rooms), hidden in Vs Computer
+   and same-device 2 Players games — nobody remote to type to there. */
+function syncStripChatMode(){
+  var online = G.mode==="live";
+  document.body.classList.toggle("no-stripchat", !online);
+  var strip = document.getElementById("matchChatStrip");
+  if (strip) strip.style.display = online ? "" : "none";
+  if (typeof queueBoardFit==="function") queueBoardFit();
+}
 function updateStripChatUI(){
+  syncStripChatMode();
   // No header label on the strip (removed to free vertical space);
   // the input placeholder still says where the message goes.
   var inp = document.getElementById("stripChatInput"), send = document.getElementById("stripChatSend");
@@ -9897,6 +9915,7 @@ function newGame(mode){
   }
 }
 function syncModeUI(){
+  if (typeof syncStripChatMode==="function") syncStripChatMode();
   document.getElementById("modeAi").classList.toggle("on", G.mode==="ai");
   document.getElementById("modeLocal").classList.toggle("on", G.mode==="local");
   document.getElementById("modeLink").classList.toggle("on", G.mode==="link");
