@@ -3286,15 +3286,19 @@ html.comp-reduce .nx-cat,html.comp-reduce .nx-mode,html.comp-reduce .nx-opp,html
    ("Tap a die — it will say which piece to move" + the die list)
    is gone from the match screen; the space it freed is now the
    always-visible in-match chat strip, fed by the same CHAT.msgs
-   and sendChat() channel as the room-chat drawer. The board
-   gives back the strip's extra height (54px) in its dvh formula
-   so the match stays one screen, no scroll, board and dice tray
-   unchanged. Hard announcements that used to ride the banner
-   fold into the one-line status under the turn chips.
+   and sendChat() channel as the room-chat drawer. The strip has
+   NO header label row (the "MATCH CHAT — …" line was removed to
+   free vertical space — the input placeholder still says where
+   a message goes). The board formula below is only a pre-JS
+   fallback: fitBoardToScreen() measures the column's real
+   contents on the device in use and sizes the board to whatever
+   height is actually left, so the whole match — chat input and
+   Send included — fits one screen at any screen size. Hard
+   announcements that used to ride the banner fold into the
+   one-line status under the turn chips.
    ============================================================ */
 .matchchat{display:none;}
 body.playing .matchchat{display:flex;flex-direction:column;gap:3px;order:5;flex:0 0 auto;width:100%;margin-top:5px;padding:5px 8px 6px;background:linear-gradient(180deg,#131f3d,#0b1120);border:1.5px solid rgba(201,162,39,.55);border-radius:13px;box-shadow:inset 0 1px 0 rgba(255,255,255,.08);}
-.stripnote{font-size:10.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#aeb6cc;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .striplist{height:31px;overflow-y:auto;display:flex;flex-direction:column;gap:1px;padding:2px 4px;border-radius:8px;background:rgba(3,6,16,.45);scroll-behavior:smooth;touch-action:pan-y;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;}
 .stripempty{font-size:12px;color:#8b93a8;text-align:center;padding-top:6px;}
 .stripmsg{font-size:12.5px;line-height:1.3;color:#e8e4d2;word-break:break-word;}
@@ -3308,8 +3312,8 @@ body.playing .matchchat{display:flex;flex-direction:column;gap:3px;order:5;flex:
 /* the folded one-line status in the turn banner area */
 body.playing .playstatus #statusMsg{display:block !important;font-size:12px;line-height:1.35;margin-top:3px;min-height:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--ink-soft);}
 body.playing .playstatus #statusMsg b{color:var(--ink);}
-/* board gives back the strip's extra height to keep the one-screen fit */
-body.playing .boardframe{width:min(calc(100vw - 12px),calc(100dvh - 420px));}
+/* fallback board size (strip header row gone); fitBoardToScreen() fine-tunes it live */
+body.playing .boardframe{width:min(calc(100vw - 12px),calc(100dvh - 404px));}
 
 /* ============================================================
    ROYAL SHUFFLE (Chess960) — reveal preview, in-game indicator,
@@ -3348,7 +3352,7 @@ body.playing .boardframe{width:min(calc(100vw - 12px),calc(100dvh - 420px));}
 html.reduce-motion .board.shuffle-reveal .piece,html.reduce-motion .board.shuffle-reveal .piece.sh-king-glow{animation:none !important;}
 html.reduce-motion #shCountNum{animation:none !important;}
 html.comp-reduce .board.shuffle-reveal .piece,html.comp-reduce .board.shuffle-reveal .piece.sh-king-glow{animation:none !important;}
-@media (max-height:720px){body.playing .boardframe{width:min(calc(100vw - 12px),calc(100dvh - 482px));}}
+@media (max-height:720px){body.playing .boardframe{width:min(calc(100vw - 12px),calc(100dvh - 466px));}}
 </style>
 <body class="show-menu title-open">
 <div class="title-screen" id="titleScreen" role="dialog" aria-modal="true" aria-label="Kings and Dice — title screen">
@@ -3883,7 +3887,6 @@ html.comp-reduce .board.shuffle-reveal .piece,html.comp-reduce .board.shuffle-re
         <button class="rollbtn" id="rollBtn" type="button">Roll 3 dice</button>
       </div>
       <div class="matchchat" id="matchChatStrip" aria-label="Match chat">
-        <div class="stripnote" id="stripChatNote">Match chat</div>
         <div class="striplist" id="stripChatList"><div class="stripempty">No messages yet.</div></div>
         <div class="stripinputrow">
           <input id="stripChatInput" type="text" maxlength="300" placeholder="Message…" autocomplete="off" />
@@ -9315,20 +9318,18 @@ function renderStripChat(){
   list.scrollTop = list.scrollHeight;
 }
 function updateStripChatUI(){
-  var note = document.getElementById("stripChatNote");
+  // No header label on the strip (removed to free vertical space);
+  // the input placeholder still says where the message goes.
   var inp = document.getElementById("stripChatInput"), send = document.getElementById("stripChatSend");
-  if (!note || !inp || !send) return;
+  if (!inp || !send) return;
   var t = chatTransport(), ready = chatReady();
   if (t==="srv" || t==="p2p"){
-    note.textContent = ready ? "Match chat — live with your opponent in this room" : "Match chat — connects when the match is live";
     inp.placeholder = "Message your opponent…";
     inp.disabled = !ready; send.disabled = !ready;
   } else if (t==="local"){
-    note.textContent = "Match chat — on-device only (shared screen)";
     inp.placeholder = "Message (stays on this device)…";
     inp.disabled = false; send.disabled = false;
   } else {
-    note.textContent = "Match chat — on-device only, no live opponent in this game";
     inp.placeholder = "Message (stays on this device)…";
     inp.disabled = false; send.disabled = false;
   }
@@ -10023,6 +10024,63 @@ document.getElementById("stripChatInput").addEventListener("keydown", function(e
 });
 renderStripChat();
 updateStripChatUI();
+/* ---------- responsive board fit ----------
+   The match column is a fixed-height flex stack and the board is
+   its only flexible piece. Instead of guessing one height formula
+   for every phone, measure what the rest of the column actually
+   takes on THIS device and size the board to the smaller of the
+   width available and the height left over — so the whole match
+   (player bars, dice tray, chat messages, chat input + Send,
+   status line) fits one screen at any screen size, and re-fits
+   on rotation, browser-toolbar changes, the on-screen keyboard,
+   and whenever a sibling in the column appears or disappears
+   (End Turn button, match clocks, move callout, team panel). */
+var boardFitQueued = false;
+function fitBoardToScreen(){
+  boardFitQueued = false;
+  if (!document.body.classList.contains("playing")) return;
+  var stage = document.getElementById("boardStage");
+  var frame = stage ? stage.querySelector(".boardframe") : null;
+  var board = document.getElementById("board");
+  if (!stage || !frame || !board) return;
+  if (document.body.classList.contains("board-fs-on") || document.fullscreenElement){
+    if (frame.style.width) frame.style.width = "";
+    return;
+  }
+  // Frame chrome: how much wider/taller the frame is than the board
+  // itself (rank/file strips, padding, borders) — measured, not guessed.
+  var extraW = frame.offsetWidth - board.offsetWidth;
+  var extraH = frame.offsetHeight - board.offsetHeight;
+  var usedH = 0;
+  for (var i = 0; i < stage.children.length; i++){
+    var el = stage.children[i];
+    if (el === frame) continue;
+    var cs = getComputedStyle(el);
+    if (cs.display === "none" || cs.position === "fixed" || cs.position === "absolute") continue;
+    usedH += el.offsetHeight + (parseFloat(cs.marginTop) || 0) + (parseFloat(cs.marginBottom) || 0);
+  }
+  var size = Math.floor(Math.min(stage.clientWidth - extraW, stage.clientHeight - usedH - extraH));
+  if (!(size > 0)) return;
+  if (size < 180) size = 180; /* never crush the board below playable */
+  var target = (size + extraW) + "px";
+  if (frame.style.width !== target) frame.style.width = target;
+}
+function queueBoardFit(){
+  if (boardFitQueued) return;
+  boardFitQueued = true;
+  requestAnimationFrame(fitBoardToScreen);
+}
+window.addEventListener("resize", queueBoardFit);
+window.addEventListener("orientationchange", queueBoardFit);
+if (window.visualViewport) window.visualViewport.addEventListener("resize", queueBoardFit);
+if (window.ResizeObserver){
+  var boardStageEl = document.getElementById("boardStage");
+  if (boardStageEl){
+    var boardFitRO = new ResizeObserver(queueBoardFit);
+    boardFitRO.observe(boardStageEl);
+    for (var bfI = 0; bfI < boardStageEl.children.length; bfI++) boardFitRO.observe(boardStageEl.children[bfI]);
+  }
+}
 document.querySelectorAll("#chatQuick button").forEach(function(b){
   b.addEventListener("click", function(){ sendChat(b.getAttribute("data-quick")); });
 });
@@ -10168,6 +10226,7 @@ function enterGameView(){
   window.scrollTo(0,0);
   renderOnlineBadge();
   renderBoard();
+  if (typeof queueBoardFit==="function") queueBoardFit();
   if (typeof updateQuickChatUI==="function") updateQuickChatUI();
   if (typeof updateChatUI==="function") updateChatUI();
   if (typeof musicSync==="function") musicSync();
