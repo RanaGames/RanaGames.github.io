@@ -1275,6 +1275,17 @@
   .radio-station-list button.on{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);}
   .radio-station-list button.on small{color:var(--accent-ink);opacity:.85;}
   .radio-station-list button.on .rs-dot{color:var(--accent-ink);}
+  /* YouTube embed dock: the small VISIBLE player for the one House
+     track that plays via YouTube (YouTube's terms require a visible
+     player while it plays). Shown only while that track is playing. */
+  .ytdock{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom));z-index:43;width:min(324px,94vw);background:rgba(7,11,24,.97);border:1.5px solid rgba(232,193,90,.65);border-radius:14px;padding:8px;box-shadow:0 14px 34px rgba(0,0,0,.5);display:none;color:#f7f2df;}
+  .ytdock.show{display:block;}
+  .ytdock-head{display:flex;align-items:center;gap:8px;padding:1px 2px 7px;}
+  .ytdock-title{flex:1;min-width:0;font-family:"Cinzel",Georgia,serif;font-weight:800;font-size:12.5px;letter-spacing:.03em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .ytdock-tag{flex:0 0 auto;font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#0b1020;background:#f6d776;border-radius:999px;padding:2px 7px;}
+  .ytdock-next{flex:0 0 auto;width:28px;height:28px;border-radius:50%;border:1px solid rgba(232,193,90,.55);background:rgba(255,255,255,.06);color:#f6d776;font-size:12px;cursor:pointer;display:grid;place-items:center;padding:0;}
+  .ytdock-frame{position:relative;width:100%;aspect-ratio:16/9;border-radius:9px;overflow:hidden;background:#000;}
+  .ytdock-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block;}
   body:not(.playing) .ingame-only{display:none !important;}
   .giconbtn.is-off{opacity:.5;}
   .giconbtn.vc-live{border-color:#4ade80;color:#4ade80;animation:voicePulse 1.3s ease-in-out infinite;}
@@ -3638,7 +3649,7 @@ html.comp-reduce .board.shuffle-reveal .piece,html.comp-reduce .board.shuffle-re
 
     <div class="about-sec">
       <h3>Radio &amp; voice</h3>
-      <p><b>Radio:</b> the menu 📻 bar plays one station, <b>House</b> — “Tropical Love” by Del, then “What We Had That Night” by RetroBlue, then “Running” by Jens East, streamed on loop from the game's own site (so it needs internet) — plus Off. Your choice is saved on this device, plays on menu and setup screens, and in a match only if you turn it on from the in-game 📻 button. It is purely local and never syncs to your friend.</p>
+      <p><b>Radio:</b> the menu 📻 bar plays one station, <b>House</b> — “Tropical Love” by Del, then “What We Had That Night” by RetroBlue, then “Running” by Jens East, then “Rinse &amp; Repeat (Again)” by Kolter, Riton &amp; Kah-Lo, on loop (the first three stream from the game's own site; the last plays via YouTube in a small on-screen player, so it needs internet) — plus Off. Your choice is saved on this device, plays on menu and setup screens, and in a match only if you turn it on from the in-game 📻 button. It is purely local and never syncs to your friend.</p>
       <p><b>Voice:</b> in Live Online rooms (server rooms and Friend rooms alike), the 🎤 button starts an audio-only <b>voice chat</b> with your friend — the mic only opens when you tap, nothing is recorded, and headphones are recommended. <b>Voice Controls</b> (Settings, off by default) add a 🎙 button in any match: tap it and say “roll”, “knight”, “e2 to e4”, “end turn”, “undo” or “flip board” — listening only starts on your tap and nothing is stored by the game.</p>
     </div>
 
@@ -3647,6 +3658,7 @@ html.comp-reduce .board.shuffle-reveal .piece,html.comp-reduce .board.shuffle-re
       <p>Tropical Love — Del · Royalty free · Music powered by BreakingCopyright (breakingcopyright.com)</p>
       <p>What We Had That Night — RetroBlue · CC BY 3.0 · Music powered by BreakingCopyright (breakingcopyright.com)</p>
       <p>Running — Jens East (feat. Elske) · YouTube Free license · Music powered by BreakingCopyright (breakingcopyright.com)</p>
+      <p>Rinse &amp; Repeat (Again) — Kolter · Riton · Kah-Lo · played via YouTube</p>
     </div>
 
     <div class="about-sec">
@@ -3686,7 +3698,7 @@ html.comp-reduce .board.shuffle-reveal .piece,html.comp-reduce .board.shuffle-re
       <li><span class="ls-title">Stakes and the pot</span><span class="ls-body">Before a match, both players stake the <b>same</b> number of virtual coins. The <b>pot is both stakes together</b> — winner takes the pot, a draw gives both stakes back. Virtual coins only, no real money.</span></li>
       <li><span class="ls-title">Try the other match types</span><span class="ls-body">The setup screen offers 9 match types. <b>Chaos</b> has specials at 50% with a random Fate every 3rd round. <b>Double Kings</b> — capture BOTH enemy Kings. <b>Horde</b> — White is 24 pawns; every die moves a pawn. <b>Random Royals</b> — shuffled back rank, and <b>castling is disabled</b>. <b>Shrinking Board</b> — the edge burns after every 5 rounds; get your King off the ring. <b>Zombie</b> — spend a WILD die to resurrect a captured piece onto your first two ranks. <b>Royal Guard</b> — the classic check rules: your King must be protected, giving check ends your turn, a checked player may reroll useless dice once to find an escape, and checkmate wins. Every mode works vs Computer, 2 Players, by turn code and in Live rooms.</span></li>
       <li><span class="ls-title">Join a friend</span><span class="ls-body"><b>Live:</b> one of you taps <b>Create Room</b> and sends the other the <b>room code</b>; they enter it under Join Room and you're playing live. Once connected, tap <b>Chat</b> to message each other in the room. <b>Backup:</b> use <b>Play a Friend</b> — after your move, send the <b>turn code</b> by message; your friend pastes it in, moves, and sends a code back.</span></li>
-      <li><span class="ls-title">Tune the radio — and try voice</span><span class="ls-body">The <b>📻 radio bar</b> on the menu plays one station, <b>House</b> — “Tropical Love” by Del, then “What We Had That Night” by RetroBlue, then “Running” by Jens East, on loop, streamed from the game's site (needs internet) — or Off. In a Live room, tap <b>🎤</b> for voice chat with your friend (mic opens only on your tap; headphones recommended). Turn on <b>Voice Controls</b> in Settings and a <b>🎙 button</b> appears in matches: tap it and say <b>“roll”</b>, <b>“knight”</b>, <b>“e2 to e4”</b> or <b>“end turn”</b> to play hands-free.</span></li>
+      <li><span class="ls-title">Tune the radio — and try voice</span><span class="ls-body">The <b>📻 radio bar</b> on the menu plays one station, <b>House</b> — “Tropical Love” by Del, then “What We Had That Night” by RetroBlue, then “Running” by Jens East, then “Rinse &amp; Repeat (Again)” by Kolter, Riton &amp; Kah-Lo (via YouTube), on loop (needs internet) — or Off. In a Live room, tap <b>🎤</b> for voice chat with your friend (mic opens only on your tap; headphones recommended). Turn on <b>Voice Controls</b> in Settings and a <b>🎙 button</b> appears in matches: tap it and say <b>“roll”</b>, <b>“knight”</b>, <b>“e2 to e4”</b> or <b>“end turn”</b> to play hands-free.</span></li>
     </ol>
 
     <div class="screen-foot"><button class="backbtn backtomenu" type="button">← Back to Main Menu</button></div>
@@ -4649,7 +4661,7 @@ html.comp-reduce .board.shuffle-reveal .piece,html.comp-reduce .board.shuffle-re
     <div class="chathead"><span class="ch-title">Settings</span><button class="chatclose" type="button" data-close-panel aria-label="Close settings">✕</button></div>
     <div class="setrow"><span class="setlabel">Theme</span><div class="varianttoggle setseg" role="group" aria-label="Theme"><button type="button" data-theme-set="auto" class="on">Auto</button><button type="button" data-theme-set="light">Light</button><button type="button" data-theme-set="dark">Dark</button></div></div>
     <div class="setrow"><span class="setlabel">Radio</span>
-      <p class="panelnote" style="margin:0;">One station — <b>House</b>, playing “Tropical Love” by Del, then “What We Had That Night” by RetroBlue, then “Running” by Jens East, on loop (streamed, so it needs internet). Turn it on or off with the 📻 bar on the menu; the Music volume slider below sets its level. Radio is saved on this device and is purely local: it never syncs to your friend. In a match it stays off unless you turn it on with the 📻 button (then it plays quietly). Music credit is listed in About.</p>
+      <p class="panelnote" style="margin:0;">One station — <b>House</b>, playing “Tropical Love” by Del, then “What We Had That Night” by RetroBlue, then “Running” by Jens East, then “Rinse &amp; Repeat (Again)” by Kolter, Riton &amp; Kah-Lo (played via YouTube), on loop (streamed, so it needs internet). Turn it on or off with the 📻 bar on the menu; the Music volume slider below sets its level. Radio is saved on this device and is purely local: it never syncs to your friend. In a match it stays off unless you turn it on with the 📻 button (then it plays quietly). Music credit is listed in About.</p>
     </div>
     <div class="setrow"><span class="setlabel">Voice Controls</span><div class="varianttoggle setseg" role="group" aria-label="Voice controls"><button type="button" data-vc-set="on">On</button><button type="button" data-vc-set="off" class="on">Off</button></div><p class="panelnote" id="vcNote">Off. When on, a 🎙 button appears in matches — tap it, then say “roll”, a piece name like “knight”, “e2 to e4”, “end turn”, “undo” or “flip board”. Listening only ever starts when you tap; nothing is recorded or stored by the game.</p></div>
     <div class="setrow"><span class="setlabel">Animations</span><div class="varianttoggle setseg" role="group" aria-label="Animations"><button type="button" data-motion-set="full" class="on">Full</button><button type="button" data-motion-set="reduced">Reduced</button></div></div>
@@ -4667,7 +4679,7 @@ html.comp-reduce .board.shuffle-reveal .piece,html.comp-reduce .board.shuffle-re
 <div class="sheetdrawer navpanel" id="panelRadio" aria-label="Radio">
   <div class="sheetcard">
     <div class="chathead"><span class="ch-title">📻 Radio</span><button class="chatclose" type="button" data-close-panel aria-label="Close radio">✕</button></div>
-    <p class="panelnote" style="margin-top:2px;">One station: <b>House</b> — “Tropical Love” by Del, then “What We Had That Night” by RetroBlue, then “Running” by Jens East, streaming on loop. Use the 🔊 button on the menu radio bar to turn the radio off or back on.</p>
+    <p class="panelnote" style="margin-top:2px;">One station: <b>House</b> — “Tropical Love” by Del, then “What We Had That Night” by RetroBlue, then “Running” by Jens East, then “Rinse &amp; Repeat (Again)” by Kolter, Riton &amp; Kah-Lo (via YouTube), streaming on loop. Use the 🔊 button on the menu radio bar to turn the radio off or back on.</p>
     <div class="ingame-only">
       <div class="setrow"><span class="setlabel">Radio in this match</span><div class="varianttoggle setseg" role="group" aria-label="Radio in this match"><button type="button" id="radioInGameOn">On</button><button type="button" id="radioInGameOff" class="on">Off</button></div></div>
     </div>
@@ -4687,6 +4699,15 @@ html.comp-reduce .board.shuffle-reveal .piece,html.comp-reduce .board.shuffle-re
     </div>
     <p class="panelnote">Live Online rooms only — works in server rooms and Friend (P2P) rooms. Audio only, direct between your two phones; the game server never hears it. Your mic never opens until you tap Start (or Join), and nothing is recorded or stored. <b>Headphones recommended</b> — phone speakers can echo. Either side can mute or hang up at any time.</p>
   </div>
+</div>
+
+<div class="ytdock" id="ytDock" aria-label="YouTube player for the current radio track">
+  <div class="ytdock-head">
+    <span class="ytdock-title" id="ytDockTitle">♪ Rinse &amp; Repeat (Again) — Kolter, Riton &amp; Kah-Lo</span>
+    <span class="ytdock-tag">via YouTube</span>
+    <button class="ytdock-next" id="ytDockNext" type="button" aria-label="Next track" title="Next track">⏭</button>
+  </div>
+  <div class="ytdock-frame"><div id="ytPlayerMount"></div></div>
 </div>
 
 <button class="chatfab" id="chatFab" type="button" aria-label="Open room chat"><svg viewBox="0 0 24 24" width="21" height="21" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 3C6.5 3 2 6.9 2 11.7c0 2.7 1.4 5.1 3.7 6.7-.1 1-.5 2.3-1.2 3.3 0 .1 0 .2.1.3.1 0 .1.1.2.1 2-.1 3.9-.8 5.3-1.7.6.1 1.3.2 1.9.2 5.5 0 10-3.9 10-8.7S17.5 3 12 3z"/></svg><span class="chatbadge" id="chatBadgeFab">0</span></button>
@@ -6585,6 +6606,8 @@ function sfxMaster(ctx){
 function applyVolumes(){
   // radio: re-apply the (base × slider) volume to the House stream element
   if (typeof HOUSE!=="undefined" && HOUSE.audio){ try{ HOUSE.audio.volume = radioVolume(); }catch(e){} }
+  // …and to the YouTube embed player, when the embed track is loaded
+  if (typeof ytApplyVolume==="function"){ try{ ytApplyVolume(); }catch(e){} }
   // voice chat: the remote caller's element, if a call has built one
   if (typeof VOICE!=="undefined" && VOICE.remoteAudio){ try{ VOICE.remoteAudio.volume = VOL.voice/100; }catch(e){} }
   // sfx: push the level into the master gain right away
@@ -10570,15 +10593,17 @@ function renderPanels(){
 }
 applyCosmetics();
 
-/* ---------- radio: one station — House (3-track playlist, loops) ---------- */
+/* ---------- radio: one station — House (4-track playlist, loops) ---------- */
 var HOUSE_TRACKS = [
   { title:"Tropical Love — Del", url:"https://ranagames.github.io/music/tropical-love-del.mp3" },
   { title:"What We Had That Night — RetroBlue", url:"https://ranagames.github.io/music/retroblue-what-we-had-that-night.mp3" },
-  { title:"Running — Jens East (feat. Elske)", url:"https://ranagames.github.io/music/jens-east-running.mp3" }
+  { title:"Running — Jens East (feat. Elske)", url:"https://ranagames.github.io/music/jens-east-running.mp3" },
+  { title:"Rinse & Repeat (Again) — Kolter, Riton & Kah-Lo", type:"youtube", videoId:"xkpCvnycVzs" }
 ];
 var HOUSE_TRACK_INDEX = 0;
 function houseTrack(){ return HOUSE_TRACKS[HOUSE_TRACK_INDEX]; }
 function houseTrackTitle(){ return houseTrack().title; }
+function isYtTrack(t){ return !!(t && t.type==="youtube"); }
 var MUSIC = { on:true, unlocked:false,
   station:"house", prevStation:"house", inGameOn:false };
 var RADIO_STATIONS = [
@@ -10598,9 +10623,113 @@ try{
   }
 }catch(e){}
 
-/* The House stream: a 3-track playlist through one HTMLAudio element.
+/* ---------- House track 4: YouTube embed (no hosted audio) ----------
+   "Rinse & Repeat (Again)" is a commercial release, so the game never
+   downloads, rips or hosts it: it plays through YouTube's official
+   IFrame Player API in a small VISIBLE player (the #ytDock docked
+   above the bottom of the screen) — YouTube's terms require the
+   player to stay visible while it plays, so it is never hidden,
+   shrunk away or covered. If the API cannot load, or the owner has
+   disabled embedding (player errors such as 101/150), the radio
+   skips to the next track once instead of stalling. */
+var YT_EMBED = { player:null, ready:false, apiRequested:false, wantPlay:false, errSkipDone:false };
+function ytSyncDock(){
+  var dock = document.getElementById("ytDock"); if (!dock) return;
+  var show = isYtTrack(houseTrack()) && radioShouldPlay();
+  dock.classList.toggle("show", !!show);
+  var t = document.getElementById("ytDockTitle");
+  if (t && isYtTrack(houseTrack())) t.textContent = "♪ " + houseTrackTitle();
+  if (show) ytEnsurePlayer();
+}
+function ytApplyVolume(){
+  if (YT_EMBED.ready && YT_EMBED.player){ try{ YT_EMBED.player.setVolume(Math.round(radioVolume()*100)); }catch(e){} }
+}
+function ytEnsurePlayer(){
+  if (YT_EMBED.player) return;
+  if (window.YT && YT.Player){ ytCreatePlayer(); return; }
+  if (YT_EMBED.apiRequested) return;
+  YT_EMBED.apiRequested = true;
+  var prev = window.onYouTubeIframeAPIReady;
+  window.onYouTubeIframeAPIReady = function(){ if (typeof prev==="function"){ try{ prev(); }catch(e){} } ytCreatePlayer(); };
+  try{
+    var s = document.createElement("script");
+    s.src = "https://www.youtube.com/iframe_api";
+    s.async = true;
+    s.onerror = function(){ ytOnUnavailable(); };
+    document.head.appendChild(s);
+  }catch(e){ ytOnUnavailable(); }
+}
+function ytCreatePlayer(){
+  if (YT_EMBED.player || !window.YT || !YT.Player) return;
+  try{
+    YT_EMBED.player = new YT.Player("ytPlayerMount", {
+      width:"100%", height:"100%",
+      videoId:(houseTrack() && houseTrack().videoId) || "xkpCvnycVzs",
+      playerVars:{ rel:0, playsinline:1, modestbranding:1 },
+      events:{
+        onReady:function(){
+          YT_EMBED.ready = true;
+          ytApplyVolume();
+          if (YT_EMBED.wantPlay && isYtTrack(houseTrack()) && radioShouldPlay()){
+            try{ YT_EMBED.player.playVideo(); }catch(e){}
+          }
+        },
+        onStateChange:function(ev){
+          if (ev.data === YT.PlayerState.ENDED){
+            radioNextTrack({ auto:true }); // same wrap-around advance as the MP3 "ended" flow
+          } else if (ev.data === YT.PlayerState.PLAYING){
+            HOUSE.failStreak = 0; HOUSE.failed = false; YT_EMBED.errSkipDone = false;
+          }
+        },
+        onError:function(){ ytOnUnavailable(); }
+      }
+    });
+  }catch(e){ ytOnUnavailable(); }
+}
+function ytOnUnavailable(){
+  // API failed to load, or this video cannot be embedded: skip on to
+  // the next track once instead of stalling the radio.
+  if (!isYtTrack(houseTrack())) return;
+  if (YT_EMBED.errSkipDone) return;
+  YT_EMBED.errSkipDone = true;
+  YT_EMBED.wantPlay = false;
+  toast("▶ That track can't play here — skipping to the next one.");
+  radioNextTrack({ auto:true });
+}
+function ytPlay(){
+  YT_EMBED.wantPlay = true;
+  YT_EMBED.errSkipDone = false;
+  ytEnsurePlayer();
+  if (YT_EMBED.ready && YT_EMBED.player){
+    try{
+      var vid = houseTrack().videoId, cur = null;
+      try{ var d = YT_EMBED.player.getVideoData(); cur = d && d.video_id; }catch(e){}
+      if (cur !== vid) YT_EMBED.player.loadVideoById(vid);
+      ytApplyVolume();
+      YT_EMBED.player.playVideo();
+    }catch(e){ ytOnUnavailable(); }
+  }
+  ytSyncDock();
+}
+function ytPause(){
+  YT_EMBED.wantPlay = false;
+  if (YT_EMBED.ready && YT_EMBED.player){ try{ YT_EMBED.player.pauseVideo(); }catch(e){} }
+  ytSyncDock();
+}
+function ytStop(){
+  YT_EMBED.wantPlay = false;
+  if (YT_EMBED.ready && YT_EMBED.player){ try{ YT_EMBED.player.stopVideo(); }catch(e){} }
+  ytSyncDock();
+}
+(function(){
+  var b = document.getElementById("ytDockNext");
+  if (b) b.addEventListener("click", function(){ MUSIC.unlocked = true; radioNextTrack(); });
+})();
+
+/* The House stream: a 4-track playlist. Tracks 1–3 play through one
+   HTMLAudio element; track 4 plays through the YouTube embed above.
    Tracks play in order; when one ends the next starts, and after the
-   last it wraps back to the first. If a track cannot load (device
+   last it wraps back to the first. If an MP3 cannot load (device
    offline, file missing), the radio tries the next track and only
    falls back to silence — with a one-time explanation — when every
    track in a row has failed. */
@@ -10610,7 +10739,7 @@ function houseAudioEl(){
   var a = new Audio();
   a.preload = "auto";
   a.loop = false; // the playlist advances on "ended", then wraps
-  a.src = houseTrack().url;
+  if (houseTrack().url) a.src = houseTrack().url; // the YouTube track has no file URL
   a.addEventListener("error", function(){ houseOnError(); });
   a.addEventListener("ended", function(){ radioNextTrack({ auto:true }); });
   a.addEventListener("playing", function(){ HOUSE.failStreak = 0; HOUSE.failed = false; });
@@ -10621,7 +10750,7 @@ function houseOnError(){
   HOUSE.failStreak = (HOUSE.failStreak || 0) + 1;
   if (HOUSE.failStreak < HOUSE_TRACKS.length){
     HOUSE_TRACK_INDEX = (HOUSE_TRACK_INDEX + 1) % HOUSE_TRACKS.length;
-    if (HOUSE.audio){ try{ HOUSE.audio.src = houseTrack().url; }catch(e){} }
+    if (HOUSE.audio && houseTrack().url){ try{ HOUSE.audio.src = houseTrack().url; }catch(e){} }
     radioRenderUI();
     if (radioShouldPlay()) housePlay();
     return;
@@ -10630,6 +10759,15 @@ function houseOnError(){
 }
 function housePlay(){
   if (HOUSE.failed || !radioShouldPlay()) return;
+  if (isYtTrack(houseTrack())){
+    // YouTube track: silence the MP3 element and play through the
+    // visible embed player instead — nothing is downloaded or hosted.
+    if (HOUSE.audio){ try{ HOUSE.audio.pause(); }catch(e){} }
+    ytPlay();
+    radioRenderUI();
+    return;
+  }
+  ytStop(); // an MP3 is playing: make sure the embed is silent
   try{
     var a = houseAudioEl();
     if (a.src !== houseTrack().url){ a.src = houseTrack().url; }
@@ -10643,11 +10781,13 @@ function housePlay(){
 }
 function radioNextTrack(opts){
   opts = opts || {};
+  var wasYt = isYtTrack(houseTrack());
   HOUSE_TRACK_INDEX = (HOUSE_TRACK_INDEX + 1) % HOUSE_TRACKS.length;
   HOUSE.failed = false;
+  if (wasYt) ytStop(); // leaving the embed track: stop the video so no audio leaks
   if (HOUSE.audio){
     try{ HOUSE.audio.pause(); }catch(e){}
-    try{ HOUSE.audio.src = houseTrack().url; }catch(e){}
+    if (houseTrack().url){ try{ HOUSE.audio.src = houseTrack().url; }catch(e){} }
   }
   radioRenderUI();
   // Keeps playing if the radio is on; if it is off, the tap only
@@ -10657,6 +10797,7 @@ function radioNextTrack(opts){
 }
 function housePause(){
   if (HOUSE.audio){ try{ HOUSE.audio.pause(); }catch(e){} }
+  ytPause();
 }
 function houseFail(){
   HOUSE.failed = true;
@@ -10719,6 +10860,7 @@ function radioRenderUI(){
       ? "Radio is ON in this match — " + name + " plays quietly on loop. It's local only and never affects your friend or the game."
       : "Radio is OFF in this match (the default). Turn it on above to keep House playing quietly while you play. Purely local — never syncs.";
   }
+  ytSyncDock();
 }
 function radioSetStation(id, opts){
   opts = opts || {};
