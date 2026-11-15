@@ -1278,14 +1278,26 @@
   /* YouTube embed dock: the small VISIBLE player for the one House
      track that plays via YouTube (YouTube's terms require a visible
      player while it plays). Shown only while that track is playing. */
-  .ytdock{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom));z-index:43;width:min(324px,94vw);background:rgba(7,11,24,.97);border:1.5px solid rgba(232,193,90,.65);border-radius:14px;padding:8px;box-shadow:0 14px 34px rgba(0,0,0,.5);display:none;color:#f7f2df;}
+  .ytdock{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom));z-index:43;width:min(324px,94vw);max-width:94vw;background:rgba(7,11,24,.97);border:1.5px solid rgba(232,193,90,.65);border-radius:14px;padding:8px 8px 26px;box-shadow:0 14px 34px rgba(0,0,0,.5);display:none;color:#f7f2df;}
   .ytdock.show{display:block;}
+  .ytdock.has-pos{transform:none;bottom:auto;}
+  .ytdock.is-dragging,.ytdock.is-resizing{box-shadow:0 18px 42px rgba(0,0,0,.62);user-select:none;-webkit-user-select:none;}
+  .ytdock.is-dragging iframe,.ytdock.is-resizing iframe{pointer-events:none !important;}
+  .ytdock-drag{display:flex;align-items:center;gap:7px;height:26px;margin:0 0 6px;padding:0 9px;border-radius:8px;background:rgba(255,255,255,.07);border:1px solid rgba(232,193,90,.32);color:#e8c15a;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;}
+  .ytdock-drag:active{cursor:grabbing;}
+  .ytdock.is-dragging .ytdock-drag{cursor:grabbing;background:rgba(232,193,90,.16);}
+  .ytdock-grip{font-size:15px;line-height:1;letter-spacing:.08em;flex:0 0 auto;}
+  .ytdock-drag-label{flex:1;min-width:0;text-align:center;font-size:11px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .ytdock-drag-hint{flex:0 0 auto;font-size:10px;font-weight:650;color:rgba(247,242,223,.62);white-space:nowrap;}
+  @media (max-width:380px){.ytdock-drag-hint{display:none;}}
   .ytdock-head{display:flex;align-items:center;gap:8px;padding:1px 2px 7px;}
   .ytdock-title{flex:1;min-width:0;font-family:"Cinzel",Georgia,serif;font-weight:800;font-size:12.5px;letter-spacing:.03em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
   .ytdock-tag{flex:0 0 auto;font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#0b1020;background:#f6d776;border-radius:999px;padding:2px 7px;}
   .ytdock-next{flex:0 0 auto;width:28px;height:28px;border-radius:50%;border:1px solid rgba(232,193,90,.55);background:rgba(255,255,255,.06);color:#f6d776;font-size:12px;cursor:pointer;display:grid;place-items:center;padding:0;}
   .ytdock-frame{position:relative;width:100%;aspect-ratio:16/9;border-radius:9px;overflow:hidden;background:#000;}
-  .ytdock-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block;}
+  .ytdock-frame iframe{position:absolute;inset:0;width:100% !important;height:100% !important;border:0;display:block;}
+  .ytdock-resize{position:absolute;right:1px;bottom:1px;z-index:3;width:38px;height:25px;border:0;border-radius:0 0 13px 0;background:transparent;color:rgba(232,193,90,.95);font-size:13px;line-height:1;cursor:nwse-resize;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;display:grid;place-items:end;padding:0 6px 5px 0;text-shadow:0 1px 4px rgba(0,0,0,.8);}
+  .ytdock-resize:active{color:#f6d776;}
   body:not(.playing) .ingame-only{display:none !important;}
   .giconbtn.is-off{opacity:.5;}
   .giconbtn.vc-live{border-color:#4ade80;color:#4ade80;animation:voicePulse 1.3s ease-in-out infinite;}
@@ -4707,12 +4719,18 @@ html.comp-reduce .board.shuffle-reveal .piece,html.comp-reduce .board.shuffle-re
 </div>
 
 <div class="ytdock" id="ytDock" aria-label="YouTube player for the current radio track">
+  <div class="ytdock-drag" id="ytDockDrag" title="Drag to move · double-tap to reset position and size" aria-label="Drag to move the player. Double-tap to reset its position and size.">
+    <span class="ytdock-grip" aria-hidden="true">⠿</span>
+    <span class="ytdock-drag-label" aria-hidden="true">Drag to move</span>
+    <span class="ytdock-drag-hint" aria-hidden="true">double-tap resets</span>
+  </div>
   <div class="ytdock-head">
     <span class="ytdock-title" id="ytDockTitle">♪ Rinse &amp; Repeat (Again) — Kolter, Riton &amp; Kah-Lo</span>
     <span class="ytdock-tag">via YouTube</span>
     <button class="ytdock-next" id="ytDockNext" type="button" aria-label="Next track" title="Next track">⏭</button>
   </div>
   <div class="ytdock-frame"><div id="ytPlayerMount"></div></div>
+  <button class="ytdock-resize" id="ytDockResize" type="button" aria-label="Resize player" title="Drag to resize">◢</button>
 </div>
 
 <button class="chatfab" id="chatFab" type="button" aria-label="Open room chat"><svg viewBox="0 0 24 24" width="21" height="21" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 3C6.5 3 2 6.9 2 11.7c0 2.7 1.4 5.1 3.7 6.7-.1 1-.5 2.3-1.2 3.3 0 .1 0 .2.1.3.1 0 .1.1.2.1 2-.1 3.9-.8 5.3-1.7.6.1 1.3.2 1.9.2 5.5 0 10-3.9 10-8.7S17.5 3 12 3z"/></svg><span class="chatbadge" id="chatBadgeFab">0</span></button>
@@ -10649,7 +10667,7 @@ function ytSyncDock(){
   dock.classList.toggle("show", !!show);
   var t = document.getElementById("ytDockTitle");
   if (t && isYtTrack(houseTrack())) t.textContent = "♪ " + houseTrackTitle();
-  if (show) ytEnsurePlayer();
+  if (show){ if (typeof ytDockRestoreLayout==="function") ytDockRestoreLayout(); ytEnsurePlayer(); }
 }
 function ytApplyVolume(){
   if (YT_EMBED.ready && YT_EMBED.player){ try{ YT_EMBED.player.setVolume(Math.round(radioVolume()*100)); }catch(e){} }
@@ -10680,6 +10698,7 @@ function ytCreatePlayer(){
         onReady:function(){
           YT_EMBED.ready = true;
           ytApplyVolume();
+          if (typeof ytDockSyncPlayerSize==="function") ytDockSyncPlayerSize();
           if (YT_EMBED.wantPlay && isYtTrack(houseTrack()) && radioShouldPlay()){
             try{ YT_EMBED.player.playVideo(); }catch(e){}
           }
@@ -10734,6 +10753,186 @@ function ytStop(){
 (function(){
   var b = document.getElementById("ytDockNext");
   if (b) b.addEventListener("click", function(){ MUSIC.unlocked = true; radioNextTrack(); });
+})();
+
+/* ---------- YouTube dock: drag to move + corner resize ----------
+   The dock is a floating player, so it can be dragged anywhere by
+   its top handle and resized from its bottom-right grip (16:9 is
+   kept — the frame follows the dock width). Position and size are
+   remembered per device in localStorage, like the other radio
+   settings. Dragging/resizing never recreates the player: only the
+   dock's CSS box moves, and the player is re-sized in place with
+   player.setSize() (which does not reload the video), so playback
+   is never paused or restarted by a move. Double-tap / double-click
+   on the handle resets to the default bottom-centre spot. */
+var YT_DOCK_LS_KEY = "dicechess-ytdock-layout-v1";
+var YT_DOCK_MIN_W = 240;
+function ytDockViewport(){
+  return { w: window.innerWidth || document.documentElement.clientWidth || 360,
+           h: window.innerHeight || document.documentElement.clientHeight || 640 };
+}
+function ytDockClampPos(x, y, w, h){
+  var vp = ytDockViewport(), pad = 8;
+  var maxX = Math.max(pad, vp.w - w - pad);
+  var maxY = Math.max(pad, vp.h - h - pad);
+  return { x: Math.min(Math.max(pad, x), maxX), y: Math.min(Math.max(pad, y), maxY) };
+}
+function ytDockMaxWidth(curW, curH){
+  var vp = ytDockViewport();
+  var maxByVw = vp.w * 0.94;
+  var ratio = (curW && curH) ? (curW / curH) : 1.55;
+  var maxByVh = vp.h * 0.70 * ratio;
+  var m = Math.min(maxByVw, maxByVh);
+  if (m < YT_DOCK_MIN_W) m = Math.min(maxByVw, YT_DOCK_MIN_W);
+  return Math.max(160, m);
+}
+function ytDockSyncPlayerSize(){
+  try{
+    if (YT_EMBED.ready && YT_EMBED.player && typeof YT_EMBED.player.setSize === "function"){
+      var f = document.querySelector("#ytDock .ytdock-frame");
+      if (f && f.clientWidth && f.clientHeight) YT_EMBED.player.setSize(f.clientWidth, f.clientHeight);
+    }
+  }catch(e){}
+}
+function ytDockSaveLayout(){
+  try{
+    var dock = document.getElementById("ytDock"); if (!dock || !dock.classList.contains("has-pos")) return;
+    var r = dock.getBoundingClientRect(); if (!r.width) return;
+    localStorage.setItem(YT_DOCK_LS_KEY, JSON.stringify({ x: Math.round(r.left), y: Math.round(r.top), w: Math.round(r.width) }));
+  }catch(e){}
+}
+function ytDockLoadLayout(){
+  try{
+    var raw = localStorage.getItem(YT_DOCK_LS_KEY); if (!raw) return null;
+    var o = JSON.parse(raw);
+    if (!o || typeof o.x !== "number" || typeof o.y !== "number" || typeof o.w !== "number") return null;
+    if (!isFinite(o.x) || !isFinite(o.y) || !isFinite(o.w)) return null;
+    return o;
+  }catch(e){ return null; }
+}
+function ytDockClampToViewport(){
+  var dock = document.getElementById("ytDock"); if (!dock || !dock.classList.contains("has-pos")) return;
+  var r = dock.getBoundingClientRect(); if (!r.width || !r.height) return;
+  var maxW = ytDockMaxWidth(r.width, r.height), shrunk = false;
+  if (r.width > maxW){ dock.style.width = Math.round(maxW) + "px"; r = dock.getBoundingClientRect(); shrunk = true; }
+  var c = ytDockClampPos(r.left, r.top, r.width, r.height);
+  dock.style.left = c.x + "px"; dock.style.top = c.y + "px";
+  if (shrunk) ytDockSyncPlayerSize();
+}
+function ytDockRestoreLayout(){
+  var dock = document.getElementById("ytDock"); if (!dock) return;
+  var saved = ytDockLoadLayout(); if (!saved) return;
+  var vp = ytDockViewport();
+  var w = Math.min(Math.max(YT_DOCK_MIN_W, saved.w), Math.max(160, vp.w * 0.94));
+  dock.classList.add("has-pos");
+  dock.style.width = Math.round(w) + "px";
+  dock.style.left = Math.round(saved.x) + "px";
+  dock.style.top = Math.round(saved.y) + "px";
+  dock.style.bottom = "auto";
+  dock.style.transform = "none";
+  ytDockClampToViewport();
+  ytDockSyncPlayerSize();
+}
+function ytDockResetLayout(){
+  try{ localStorage.removeItem(YT_DOCK_LS_KEY); }catch(e){}
+  var dock = document.getElementById("ytDock"); if (!dock) return;
+  dock.classList.remove("has-pos");
+  dock.style.left = ""; dock.style.top = ""; dock.style.bottom = ""; dock.style.width = ""; dock.style.transform = "";
+  ytDockSyncPlayerSize();
+}
+function ytDockEnsureExplicitPos(){
+  var dock = document.getElementById("ytDock"); if (!dock || dock.classList.contains("has-pos")) return;
+  var r = dock.getBoundingClientRect(); if (!r.width) return;
+  dock.classList.add("has-pos");
+  dock.style.width = Math.round(r.width) + "px";
+  dock.style.left = Math.round(r.left) + "px";
+  dock.style.top = Math.round(r.top) + "px";
+  dock.style.bottom = "auto";
+  dock.style.transform = "none";
+}
+(function initYtDockMoveResize(){
+  var dock = document.getElementById("ytDock");
+  var handle = document.getElementById("ytDockDrag");
+  var grip = document.getElementById("ytDockResize");
+  if (!dock || !handle) return;
+  ytDockRestoreLayout();
+  handle.addEventListener("dblclick", function(e){ e.preventDefault(); ytDockResetLayout(); });
+  var drag = null, resize = null, lastTapAt = 0;
+  /* ----- drag to move (top handle) ----- */
+  handle.addEventListener("pointerdown", function(e){
+    if (drag) return;
+    if (e.pointerType === "mouse" && e.button !== 0) return;
+    ytDockEnsureExplicitPos();
+    var r = dock.getBoundingClientRect(); if (!r.width) return;
+    drag = { id: e.pointerId, sx: e.clientX, sy: e.clientY, lx: r.left, ly: r.top, w: r.width, h: r.height, moved: false, t0: Date.now() };
+    try{ handle.setPointerCapture(e.pointerId); }catch(err){}
+    dock.classList.add("is-dragging");
+    e.preventDefault();
+  });
+  handle.addEventListener("pointermove", function(e){
+    if (!drag || e.pointerId !== drag.id) return;
+    var dx = e.clientX - drag.sx, dy = e.clientY - drag.sy;
+    if (Math.abs(dx) + Math.abs(dy) > 3) drag.moved = true;
+    var c = ytDockClampPos(drag.lx + dx, drag.ly + dy, drag.w, drag.h);
+    dock.style.left = c.x + "px"; dock.style.top = c.y + "px";
+    e.preventDefault();
+  });
+  function endDrag(e, cancelled){
+    if (!drag || (e && e.pointerId !== drag.id)) return;
+    var moved = drag.moved, t0 = drag.t0; drag = null;
+    dock.classList.remove("is-dragging");
+    if (moved){ lastTapAt = 0; ytDockSaveLayout(); return; }
+    if (cancelled) return;
+    // A tap (press + release without moving): two in quick succession
+    // count as a double-tap and reset the dock. A second press that
+    // turns into a drag is handled above and never reaches here, so a
+    // quick re-drag right after a tap does not trigger a reset.
+    var now = Date.now();
+    if (now - t0 < 500 && lastTapAt && now - lastTapAt < 400){ lastTapAt = 0; ytDockResetLayout(); }
+    else if (now - t0 < 500){ lastTapAt = now; }
+  }
+  handle.addEventListener("pointerup", function(e){ endDrag(e, false); });
+  handle.addEventListener("pointercancel", function(e){ endDrag(e, true); });
+  /* ----- resize (bottom-right grip, 16:9 kept) ----- */
+  if (grip){
+    grip.addEventListener("click", function(e){ e.preventDefault(); e.stopPropagation(); });
+    grip.addEventListener("pointerdown", function(e){
+      if (resize) return;
+      if (e.pointerType === "mouse" && e.button !== 0) return;
+      ytDockEnsureExplicitPos();
+      var r = dock.getBoundingClientRect(); if (!r.width) return;
+      resize = { id: e.pointerId, sx: e.clientX, sy: e.clientY, lx: r.left, ly: r.top, w: r.width, h: r.height, moved: false };
+      try{ grip.setPointerCapture(e.pointerId); }catch(err){}
+      dock.classList.add("is-resizing");
+      e.preventDefault(); e.stopPropagation();
+    });
+    grip.addEventListener("pointermove", function(e){
+      if (!resize || e.pointerId !== resize.id) return;
+      var dx = e.clientX - resize.sx, dy = e.clientY - resize.sy;
+      if (Math.abs(dx) + Math.abs(dy) > 3) resize.moved = true;
+      var newW;
+      if (Math.abs(dy) > Math.abs(dx)) newW = resize.w + dy * (resize.w / resize.h);
+      else newW = resize.w + dx;
+      var maxW = ytDockMaxWidth(resize.w, resize.h);
+      newW = Math.min(Math.max(YT_DOCK_MIN_W, newW), maxW);
+      if (newW < YT_DOCK_MIN_W) newW = Math.min(YT_DOCK_MIN_W, maxW);
+      dock.style.width = Math.round(newW) + "px";
+      ytDockClampToViewport();
+      e.preventDefault();
+    });
+    function endResize(e){
+      if (!resize || (e && e.pointerId !== resize.id)) return;
+      var moved = resize.moved; resize = null;
+      dock.classList.remove("is-resizing");
+      ytDockSyncPlayerSize();
+      if (moved) ytDockSaveLayout();
+    }
+    grip.addEventListener("pointerup", endResize);
+    grip.addEventListener("pointercancel", endResize);
+  }
+  /* ----- keep the dock reachable if the viewport changes ----- */
+  window.addEventListener("resize", function(){ ytDockClampToViewport(); });
+  window.addEventListener("orientationchange", function(){ setTimeout(function(){ ytDockClampToViewport(); }, 120); });
 })();
 
 /* The House stream: a 9-track playlist. Tracks 1–3 play through one
