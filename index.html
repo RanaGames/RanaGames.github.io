@@ -1275,29 +1275,6 @@
   .radio-station-list button.on{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);}
   .radio-station-list button.on small{color:var(--accent-ink);opacity:.85;}
   .radio-station-list button.on .rs-dot{color:var(--accent-ink);}
-  /* YouTube embed dock: the small VISIBLE player for the one House
-     track that plays via YouTube (YouTube's terms require a visible
-     player while it plays). Shown only while that track is playing. */
-  .ytdock{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom));z-index:43;width:min(324px,94vw);max-width:94vw;background:rgba(7,11,24,.97);border:1.5px solid rgba(232,193,90,.65);border-radius:14px;padding:8px 8px 26px;box-shadow:0 14px 34px rgba(0,0,0,.5);display:none;color:#f7f2df;}
-  .ytdock.show{display:block;}
-  .ytdock.has-pos{transform:none;bottom:auto;}
-  .ytdock.is-dragging,.ytdock.is-resizing{box-shadow:0 18px 42px rgba(0,0,0,.62);user-select:none;-webkit-user-select:none;}
-  .ytdock.is-dragging iframe,.ytdock.is-resizing iframe{pointer-events:none !important;}
-  .ytdock-drag{display:flex;align-items:center;gap:7px;height:26px;margin:0 0 6px;padding:0 9px;border-radius:8px;background:rgba(255,255,255,.07);border:1px solid rgba(232,193,90,.32);color:#e8c15a;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;}
-  .ytdock-drag:active{cursor:grabbing;}
-  .ytdock.is-dragging .ytdock-drag{cursor:grabbing;background:rgba(232,193,90,.16);}
-  .ytdock-grip{font-size:15px;line-height:1;letter-spacing:.08em;flex:0 0 auto;}
-  .ytdock-drag-label{flex:1;min-width:0;text-align:center;font-size:11px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  .ytdock-drag-hint{flex:0 0 auto;font-size:10px;font-weight:650;color:rgba(247,242,223,.62);white-space:nowrap;}
-  @media (max-width:380px){.ytdock-drag-hint{display:none;}}
-  .ytdock-head{display:flex;align-items:center;gap:8px;padding:1px 2px 7px;}
-  .ytdock-title{flex:1;min-width:0;font-family:"Cinzel",Georgia,serif;font-weight:800;font-size:12.5px;letter-spacing:.03em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  .ytdock-tag{flex:0 0 auto;font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#0b1020;background:#f6d776;border-radius:999px;padding:2px 7px;}
-  .ytdock-next{flex:0 0 auto;width:28px;height:28px;border-radius:50%;border:1px solid rgba(232,193,90,.55);background:rgba(255,255,255,.06);color:#f6d776;font-size:12px;cursor:pointer;display:grid;place-items:center;padding:0;}
-  .ytdock-frame{position:relative;width:100%;aspect-ratio:16/9;border-radius:9px;overflow:hidden;background:#000;}
-  .ytdock-frame iframe{position:absolute;inset:0;width:100% !important;height:100% !important;border:0;display:block;}
-  .ytdock-resize{position:absolute;right:1px;bottom:1px;z-index:3;width:38px;height:25px;border:0;border-radius:0 0 13px 0;background:transparent;color:rgba(232,193,90,.95);font-size:13px;line-height:1;cursor:nwse-resize;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;display:grid;place-items:end;padding:0 6px 5px 0;text-shadow:0 1px 4px rgba(0,0,0,.8);}
-  .ytdock-resize:active{color:#f6d776;}
   body:not(.playing) .ingame-only{display:none !important;}
   .giconbtn.is-off{opacity:.5;}
   .giconbtn.vc-live{border-color:#4ade80;color:#4ade80;animation:voicePulse 1.3s ease-in-out infinite;}
@@ -3661,7 +3638,7 @@ html.comp-reduce .board.shuffle-reveal .piece,html.comp-reduce .board.shuffle-re
 
     <div class="about-sec">
       <h3>Radio &amp; voice</h3>
-      <p><b>Radio:</b> the menu 📻 bar plays one station, <b>House</b> — “Tropical Love” by Del, then “What We Had That Night” by RetroBlue, then “Running” by Jens East, then “Rinse &amp; Repeat (Again)” by Kolter, Riton &amp; Kah-Lo, then “Do You Really Like It” by REESE &amp; Futosé, then “Lost” by Boy Harsher, then “Stranger” by Zara Muzzic, then “Lauren (I Can't Stay Forever) (Extended)” by Oden &amp; Fatzo, then “Smalltown Boy (Remastered)” by Bronski Beat, on loop (the first three stream from the game's own site; the last six play via YouTube in a small on-screen player, so they need internet) — plus Off. Your choice is saved on this device, plays on menu and setup screens, and in a match only if you turn it on from the in-game 📻 button. It is purely local and never syncs to your friend.</p>
+      <p><b>Radio:</b> the menu 📻 bar plays one of two stations — <b>House</b>, the game's own playlist (“Tropical Love” by Del, “What We Had That Night” by RetroBlue and “Running” by Jens East) on loop, streamed from the game's own site — or <b>Centreforce 883</b>, a live UK house radio station streamed live from its own stream — plus Off. Your choice is saved on this device, plays on menu and setup screens, and in a match only if you turn it on from the in-game 📻 button. It is purely local and never syncs to your friend.</p>
       <p><b>Voice:</b> in Live Online rooms (server rooms and Friend rooms alike), the 🎤 button starts an audio-only <b>voice chat</b> with your friend — the mic only opens when you tap, nothing is recorded, and headphones are recommended. <b>Voice Controls</b> (Settings, off by default) add a 🎙 button in any match: tap it and say “roll”, “knight”, “e2 to e4”, “end turn”, “undo” or “flip board” — listening only starts on your tap and nothing is stored by the game.</p>
     </div>
 
@@ -3669,13 +3646,8 @@ html.comp-reduce .board.shuffle-reveal .piece,html.comp-reduce .board.shuffle-re
       <h3>Music credits</h3>
       <p>Tropical Love — Del · Royalty free · Music powered by BreakingCopyright (breakingcopyright.com)</p>
       <p>What We Had That Night — RetroBlue · CC BY 3.0 · Music powered by BreakingCopyright (breakingcopyright.com)</p>
-      <p>Running — Jens East (feat. Elske) · YouTube Free license · Music powered by BreakingCopyright (breakingcopyright.com)</p>
-      <p>Rinse &amp; Repeat (Again) — Kolter · Riton · Kah-Lo · played via YouTube</p>
-      <p>Do You Really Like It — REESE · Futosé · played via YouTube</p>
-      <p>Lost — Boy Harsher · played via YouTube</p>
-      <p>Stranger — Zara Muzzic · played via YouTube</p>
-      <p>Lauren (I Can't Stay Forever) (Extended) — Oden · Fatzo · played via YouTube</p>
-      <p>Smalltown Boy (Remastered) — Bronski Beat · played via YouTube</p>
+      <p>Running — Jens East (feat. Elske) · Music powered by BreakingCopyright (breakingcopyright.com)</p>
+      <p>Centreforce 883 — live house radio, streamed from its own stream (centreforceradio.com)</p>
     </div>
 
     <div class="about-sec">
@@ -3715,7 +3687,7 @@ html.comp-reduce .board.shuffle-reveal .piece,html.comp-reduce .board.shuffle-re
       <li><span class="ls-title">Stakes and the pot</span><span class="ls-body">Before a match, both players stake the <b>same</b> number of virtual coins. The <b>pot is both stakes together</b> — winner takes the pot, a draw gives both stakes back. Virtual coins only, no real money.</span></li>
       <li><span class="ls-title">Try the other match types</span><span class="ls-body">The setup screen offers 9 match types. <b>Chaos</b> has specials at 50% with a random Fate every 3rd round. <b>Double Kings</b> — capture BOTH enemy Kings. <b>Horde</b> — White is 24 pawns; every die moves a pawn. <b>Random Royals</b> — shuffled back rank, and <b>castling is disabled</b>. <b>Shrinking Board</b> — the edge burns after every 5 rounds; get your King off the ring. <b>Zombie</b> — spend a WILD die to resurrect a captured piece onto your first two ranks. <b>Royal Guard</b> — the classic check rules: your King must be protected, giving check ends your turn, a checked player may reroll useless dice once to find an escape, and checkmate wins. Every mode works vs Computer, 2 Players, by turn code and in Live rooms.</span></li>
       <li><span class="ls-title">Join a friend</span><span class="ls-body"><b>Live:</b> one of you taps <b>Create Room</b> and sends the other the <b>room code</b>; they enter it under Join Room and you're playing live. Once connected, tap <b>Chat</b> to message each other in the room. <b>Backup:</b> use <b>Play a Friend</b> — after your move, send the <b>turn code</b> by message; your friend pastes it in, moves, and sends a code back.</span></li>
-      <li><span class="ls-title">Tune the radio — and try voice</span><span class="ls-body">The <b>📻 radio bar</b> on the menu plays one station, <b>House</b> — “Tropical Love” by Del, then “What We Had That Night” by RetroBlue, then “Running” by Jens East, then “Rinse &amp; Repeat (Again)” by Kolter, Riton &amp; Kah-Lo, “Do You Really Like It” by REESE &amp; Futosé, “Lost” by Boy Harsher, “Stranger” by Zara Muzzic, “Lauren (I Can't Stay Forever) (Extended)” by Oden &amp; Fatzo and “Smalltown Boy (Remastered)” by Bronski Beat (the last six via YouTube), on loop (needs internet) — or Off. In a Live room, tap <b>🎤</b> for voice chat with your friend (mic opens only on your tap; headphones recommended). Turn on <b>Voice Controls</b> in Settings and a <b>🎙 button</b> appears in matches: tap it and say <b>“roll”</b>, <b>“knight”</b>, <b>“e2 to e4”</b> or <b>“end turn”</b> to play hands-free.</span></li>
+      <li><span class="ls-title">Tune the radio — and try voice</span><span class="ls-body">The <b>📻 radio bar</b> on the menu plays one of two stations — <b>House</b>, the game's own playlist (“Tropical Love” by Del, “What We Had That Night” by RetroBlue and “Running” by Jens East) on loop — or <b>Centreforce 883</b>, live UK house radio streaming live — or Off (both stations need internet). In a Live room, tap <b>🎤</b> for voice chat with your friend (mic opens only on your tap; headphones recommended). Turn on <b>Voice Controls</b> in Settings and a <b>🎙 button</b> appears in matches: tap it and say <b>“roll”</b>, <b>“knight”</b>, <b>“e2 to e4”</b> or <b>“end turn”</b> to play hands-free.</span></li>
     </ol>
 
     <div class="screen-foot"><button class="backbtn backtomenu" type="button">← Back to Main Menu</button></div>
@@ -4678,7 +4650,7 @@ html.comp-reduce .board.shuffle-reveal .piece,html.comp-reduce .board.shuffle-re
     <div class="chathead"><span class="ch-title">Settings</span><button class="chatclose" type="button" data-close-panel aria-label="Close settings">✕</button></div>
     <div class="setrow"><span class="setlabel">Theme</span><div class="varianttoggle setseg" role="group" aria-label="Theme"><button type="button" data-theme-set="auto" class="on">Auto</button><button type="button" data-theme-set="light">Light</button><button type="button" data-theme-set="dark">Dark</button></div></div>
     <div class="setrow"><span class="setlabel">Radio</span>
-      <p class="panelnote" style="margin:0;">One station — <b>House</b>, playing “Tropical Love” by Del, then “What We Had That Night” by RetroBlue, then “Running” by Jens East, then “Rinse &amp; Repeat (Again)” by Kolter, Riton &amp; Kah-Lo, “Do You Really Like It” by REESE &amp; Futosé, “Lost” by Boy Harsher, “Stranger” by Zara Muzzic, “Lauren (I Can't Stay Forever) (Extended)” by Oden &amp; Fatzo and “Smalltown Boy (Remastered)” by Bronski Beat (the last six played via YouTube), on loop (streamed, so it needs internet). Turn it on or off with the 📻 bar on the menu; the Music volume slider below sets its level. Radio is saved on this device and is purely local: it never syncs to your friend. In a match it stays off unless you turn it on with the 📻 button (then it plays quietly). Music credit is listed in About.</p>
+      <p class="panelnote" style="margin:0;">Two stations — <b>House</b>, the game's own playlist (“Tropical Love” by Del, “What We Had That Night” by RetroBlue and “Running” by Jens East) on loop, streamed from the game's own site; and <b>Centreforce 883</b>, a live UK house radio station streamed live from its own stream. Pick a station in the 📻 Radio panel; turn the radio on or off with the 📻 bar on the menu; the Music volume slider below sets its level. Radio is saved on this device and is purely local: it never syncs to your friend. In a match it stays off unless you turn it on with the 📻 button (then it plays quietly). Music credit is listed in About.</p>
     </div>
     <div class="setrow"><span class="setlabel">Voice Controls</span><div class="varianttoggle setseg" role="group" aria-label="Voice controls"><button type="button" data-vc-set="on">On</button><button type="button" data-vc-set="off" class="on">Off</button></div><p class="panelnote" id="vcNote">Off. When on, a 🎙 button appears in matches — tap it, then say “roll”, a piece name like “knight”, “e2 to e4”, “end turn”, “undo” or “flip board”. Listening only ever starts when you tap; nothing is recorded or stored by the game.</p></div>
     <div class="setrow"><span class="setlabel">Animations</span><div class="varianttoggle setseg" role="group" aria-label="Animations"><button type="button" data-motion-set="full" class="on">Full</button><button type="button" data-motion-set="reduced">Reduced</button></div></div>
@@ -4688,7 +4660,7 @@ html.comp-reduce .board.shuffle-reveal .piece,html.comp-reduce .board.shuffle-re
       <div class="volrow"><label for="volMusic">🎵 Music</label><input type="range" id="volMusic" min="0" max="100" step="1" value="100" aria-label="Music volume"><span class="volval" id="volMusicVal">100%</span></div>
       <div class="volrow"><label for="volSfx">🔊 Sound FX</label><input type="range" id="volSfx" min="0" max="100" step="1" value="100" aria-label="Sound effects volume"><span class="volval" id="volSfxVal">100%</span></div>
       <div class="volrow"><label for="volVoice">🎤 Voice chat</label><input type="range" id="volVoice" min="0" max="100" step="1" value="100" aria-label="Voice chat volume"><span class="volval" id="volVoiceVal">100%</span></div>
-      <p class="panelnote">Saved on this device. Music drives the radio (House) and changes live while the track plays; Sound FX drives the game's own sounds; Voice chat drives how loud your friend sounds in Live matches.</p></div>
+      <p class="panelnote">Saved on this device. Music drives the radio and changes live while it plays; Sound FX drives the game's own sounds; Voice chat drives how loud your friend sounds in Live matches.</p></div>
     <button class="utilbtn panelbtn" id="settingsResetBtn" type="button">Reset coins to 1,000 (free)</button>
   </div>
 </div>
@@ -4696,7 +4668,12 @@ html.comp-reduce .board.shuffle-reveal .piece,html.comp-reduce .board.shuffle-re
 <div class="sheetdrawer navpanel" id="panelRadio" aria-label="Radio">
   <div class="sheetcard">
     <div class="chathead"><span class="ch-title">📻 Radio</span><button class="chatclose" type="button" data-close-panel aria-label="Close radio">✕</button></div>
-    <p class="panelnote" style="margin-top:2px;">One station: <b>House</b> — “Tropical Love” by Del, then “What We Had That Night” by RetroBlue, then “Running” by Jens East, then “Rinse &amp; Repeat (Again)” by Kolter, Riton &amp; Kah-Lo, “Do You Really Like It” by REESE &amp; Futosé, “Lost” by Boy Harsher, “Stranger” by Zara Muzzic, “Lauren (I Can't Stay Forever) (Extended)” by Oden &amp; Fatzo and “Smalltown Boy (Remastered)” by Bronski Beat (the last six via YouTube), streaming on loop. Use the 🔊 button on the menu radio bar to turn the radio off or back on.</p>
+    <p class="panelnote" style="margin-top:2px;">Two stations: <b>House</b> — the game's own playlist on loop, streamed from the game's own site; and <b>Centreforce 883</b> — live UK house radio, streamed live from its own stream. Pick one below, or use the 🔊 button on the menu radio bar to turn the radio off or back on.</p>
+    <div class="radio-station-list" id="radioStationList">
+      <button type="button" data-station="house"><b>House</b><small>The game's own playlist — “Tropical Love”, “What We Had That Night”, “Running”, on loop</small><span class="rs-dot">OFF</span></button>
+      <button type="button" data-station="centreforce"><b>Centreforce 883</b><small>Live UK house radio — the same station as The Dale's car radio, streaming live</small><span class="rs-dot">OFF</span></button>
+      <button type="button" data-station="off"><b>Off</b><small>Radio off</small><span class="rs-dot">OFF</span></button>
+    </div>
     <div class="ingame-only">
       <div class="setrow"><span class="setlabel">Radio in this match</span><div class="varianttoggle setseg" role="group" aria-label="Radio in this match"><button type="button" id="radioInGameOn">On</button><button type="button" id="radioInGameOff" class="on">Off</button></div></div>
     </div>
@@ -4718,20 +4695,6 @@ html.comp-reduce .board.shuffle-reveal .piece,html.comp-reduce .board.shuffle-re
   </div>
 </div>
 
-<div class="ytdock" id="ytDock" aria-label="YouTube player for the current radio track">
-  <div class="ytdock-drag" id="ytDockDrag" title="Drag to move · double-tap to reset position and size" aria-label="Drag to move the player. Double-tap to reset its position and size.">
-    <span class="ytdock-grip" aria-hidden="true">⠿</span>
-    <span class="ytdock-drag-label" aria-hidden="true">Drag to move</span>
-    <span class="ytdock-drag-hint" aria-hidden="true">double-tap resets</span>
-  </div>
-  <div class="ytdock-head">
-    <span class="ytdock-title" id="ytDockTitle">♪ Rinse &amp; Repeat (Again) — Kolter, Riton &amp; Kah-Lo</span>
-    <span class="ytdock-tag">via YouTube</span>
-    <button class="ytdock-next" id="ytDockNext" type="button" aria-label="Next track" title="Next track">⏭</button>
-  </div>
-  <div class="ytdock-frame"><div id="ytPlayerMount"></div></div>
-  <button class="ytdock-resize" id="ytDockResize" type="button" aria-label="Resize player" title="Drag to resize">◢</button>
-</div>
 
 <button class="chatfab" id="chatFab" type="button" aria-label="Open room chat"><svg viewBox="0 0 24 24" width="21" height="21" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 3C6.5 3 2 6.9 2 11.7c0 2.7 1.4 5.1 3.7 6.7-.1 1-.5 2.3-1.2 3.3 0 .1 0 .2.1.3.1 0 .1.1.2.1 2-.1 3.9-.8 5.3-1.7.6.1 1.3.2 1.9.2 5.5 0 10-3.9 10-8.7S17.5 3 12 3z"/></svg><span class="chatbadge" id="chatBadgeFab">0</span></button>
 <div class="chatdrawer" id="chatDrawer" aria-label="Live room chat">
@@ -6629,8 +6592,6 @@ function sfxMaster(ctx){
 function applyVolumes(){
   // radio: re-apply the (base × slider) volume to the House stream element
   if (typeof HOUSE!=="undefined" && HOUSE.audio){ try{ HOUSE.audio.volume = radioVolume(); }catch(e){} }
-  // …and to the YouTube embed player, when the embed track is loaded
-  if (typeof ytApplyVolume==="function"){ try{ ytApplyVolume(); }catch(e){} }
   // voice chat: the remote caller's element, if a call has built one
   if (typeof VOICE!=="undefined" && VOICE.remoteAudio){ try{ VOICE.remoteAudio.volume = VOL.voice/100; }catch(e){} }
   // sfx: push the level into the master gain right away
@@ -10616,350 +10577,86 @@ function renderPanels(){
 }
 applyCosmetics();
 
-/* ---------- radio: one station — House (9-track playlist, loops) ---------- */
+/* ---------- radio: two stations — House (3-track playlist, loops)
+   and Centreforce 883 (live stream) ---------- */
 var HOUSE_TRACKS = [
   { title:"Tropical Love — Del", url:"https://ranagames.github.io/music/tropical-love-del.mp3" },
   { title:"What We Had That Night — RetroBlue", url:"https://ranagames.github.io/music/retroblue-what-we-had-that-night.mp3" },
-  { title:"Running — Jens East (feat. Elske)", url:"https://ranagames.github.io/music/jens-east-running.mp3" },
-  { title:"Rinse & Repeat (Again) — Kolter, Riton & Kah-Lo", type:"youtube", videoId:"xkpCvnycVzs" },
-  { title:"Do You Really Like It — REESE & Futosé", type:"youtube", videoId:"0RU_P__rAnI" },
-  { title:"Lost — Boy Harsher", type:"youtube", videoId:"gYJcQXHjA8c" },
-  { title:"Stranger — Zara Muzzic", type:"youtube", videoId:"tFGh03I1YQk" },
-  { title:"Lauren (I Can't Stay Forever) (Extended) — Oden & Fatzo", type:"youtube", videoId:"Aosr_W2KLUg" },
-  { title:"Smalltown Boy (Remastered) — Bronski Beat", type:"youtube", videoId:"a8dzSKRtctU" }
+  { title:"Running — Jens East (feat. Elske)", url:"https://ranagames.github.io/music/jens-east-running.mp3" }
 ];
+var CENTREFORCE_URL = "https://listen.centreforceradio.com:8830/192";
 var HOUSE_TRACK_INDEX = 0;
 function houseTrack(){ return HOUSE_TRACKS[HOUSE_TRACK_INDEX]; }
 function houseTrackTitle(){ return houseTrack().title; }
-function isYtTrack(t){ return !!(t && t.type==="youtube"); }
+function radioIsStream(){ return MUSIC.station==="centreforce"; }
+function radioCurrentSrc(){ return radioIsStream() ? CENTREFORCE_URL : houseTrack().url; }
 var MUSIC = { on:true, unlocked:false,
   station:"house", prevStation:"house", inGameOn:false };
 var RADIO_STATIONS = [
   { id:"house", name:"House" },
+  { id:"centreforce", name:"Centreforce 883" },
   { id:"off",   name:"Off" }
 ];
-function radioStationName(id){ return id==="off" ? "Off" : "House"; }
+function radioStationName(id){
+  for (var i=0;i<RADIO_STATIONS.length;i++) if (RADIO_STATIONS[i].id===id) return RADIO_STATIONS[i].name;
+  return "House";
+}
 try{
   var savedStation = localStorage.getItem("dicechess-radio");
-  // Migration: every station removed in this build (Shanty FM / House FM /
-  // Deep FM / Your Tunes) lands on the one remaining station, House.
-  // Only an explicit "off" stays off.
+  // Saved stations: "house" and "centreforce" restore as themselves;
+  // only an explicit "off" stays off. Anything else (legacy or
+  // unknown values from older builds) lands on House.
   if (savedStation==="off"){ MUSIC.station = "off"; MUSIC.on = false; }
+  else if (savedStation==="centreforce"){
+    MUSIC.station = "centreforce"; MUSIC.prevStation = "centreforce"; MUSIC.on = true;
+  }
   else if (savedStation){
     MUSIC.station = "house"; MUSIC.prevStation = "house"; MUSIC.on = true;
     try{ localStorage.setItem("dicechess-radio", "house"); }catch(e){}
   }
 }catch(e){}
 
-/* ---------- House YouTube tracks: embed (no hosted audio) ----------
-   The YouTube tracks are commercial releases, so the game never
-   downloads, rips or hosts them: each plays through YouTube's official
-   IFrame Player API in a small VISIBLE player (the #ytDock docked
-   above the bottom of the screen) — YouTube's terms require the
-   player to stay visible while it plays, so it is never hidden,
-   shrunk away or covered. If the API cannot load, or the owner has
-   disabled embedding (player errors such as 101/150), the radio
-   skips to the next track once instead of stalling. */
-var YT_EMBED = { player:null, ready:false, apiRequested:false, wantPlay:false, errSkipDone:false };
-function ytSyncDock(){
-  var dock = document.getElementById("ytDock"); if (!dock) return;
-  var show = isYtTrack(houseTrack()) && radioShouldPlay();
-  dock.classList.toggle("show", !!show);
-  var t = document.getElementById("ytDockTitle");
-  if (t && isYtTrack(houseTrack())) t.textContent = "♪ " + houseTrackTitle();
-  if (show){ if (typeof ytDockRestoreLayout==="function") ytDockRestoreLayout(); ytEnsurePlayer(); }
-}
-function ytApplyVolume(){
-  if (YT_EMBED.ready && YT_EMBED.player){ try{ YT_EMBED.player.setVolume(Math.round(radioVolume()*100)); }catch(e){} }
-}
-function ytEnsurePlayer(){
-  if (YT_EMBED.player) return;
-  if (window.YT && YT.Player){ ytCreatePlayer(); return; }
-  if (YT_EMBED.apiRequested) return;
-  YT_EMBED.apiRequested = true;
-  var prev = window.onYouTubeIframeAPIReady;
-  window.onYouTubeIframeAPIReady = function(){ if (typeof prev==="function"){ try{ prev(); }catch(e){} } ytCreatePlayer(); };
-  try{
-    var s = document.createElement("script");
-    s.src = "https://www.youtube.com/iframe_api";
-    s.async = true;
-    s.onerror = function(){ ytOnUnavailable(); };
-    document.head.appendChild(s);
-  }catch(e){ ytOnUnavailable(); }
-}
-function ytCreatePlayer(){
-  if (YT_EMBED.player || !window.YT || !YT.Player) return;
-  try{
-    YT_EMBED.player = new YT.Player("ytPlayerMount", {
-      width:"100%", height:"100%",
-      videoId:(houseTrack() && houseTrack().videoId) || "xkpCvnycVzs",
-      playerVars:{ rel:0, playsinline:1, modestbranding:1 },
-      events:{
-        onReady:function(){
-          YT_EMBED.ready = true;
-          ytApplyVolume();
-          if (typeof ytDockSyncPlayerSize==="function") ytDockSyncPlayerSize();
-          if (YT_EMBED.wantPlay && isYtTrack(houseTrack()) && radioShouldPlay()){
-            try{ YT_EMBED.player.playVideo(); }catch(e){}
-          }
-        },
-        onStateChange:function(ev){
-          if (ev.data === YT.PlayerState.ENDED){
-            radioNextTrack({ auto:true }); // same wrap-around advance as the MP3 "ended" flow
-          } else if (ev.data === YT.PlayerState.PLAYING){
-            HOUSE.failStreak = 0; HOUSE.failed = false; YT_EMBED.errSkipDone = false;
-          }
-        },
-        onError:function(){ ytOnUnavailable(); }
-      }
-    });
-  }catch(e){ ytOnUnavailable(); }
-}
-function ytOnUnavailable(){
-  // API failed to load, or this video cannot be embedded: skip on to
-  // the next track once instead of stalling the radio.
-  if (!isYtTrack(houseTrack())) return;
-  if (YT_EMBED.errSkipDone) return;
-  YT_EMBED.errSkipDone = true;
-  YT_EMBED.wantPlay = false;
-  toast("▶ That track can't play here — skipping to the next one.");
-  radioNextTrack({ auto:true });
-}
-function ytPlay(){
-  YT_EMBED.wantPlay = true;
-  YT_EMBED.errSkipDone = false;
-  ytEnsurePlayer();
-  if (YT_EMBED.ready && YT_EMBED.player){
-    try{
-      var vid = houseTrack().videoId, cur = null;
-      try{ var d = YT_EMBED.player.getVideoData(); cur = d && d.video_id; }catch(e){}
-      if (cur !== vid) YT_EMBED.player.loadVideoById(vid);
-      ytApplyVolume();
-      YT_EMBED.player.playVideo();
-    }catch(e){ ytOnUnavailable(); }
-  }
-  ytSyncDock();
-}
-function ytPause(){
-  YT_EMBED.wantPlay = false;
-  if (YT_EMBED.ready && YT_EMBED.player){ try{ YT_EMBED.player.pauseVideo(); }catch(e){} }
-  ytSyncDock();
-}
-function ytStop(){
-  YT_EMBED.wantPlay = false;
-  if (YT_EMBED.ready && YT_EMBED.player){ try{ YT_EMBED.player.stopVideo(); }catch(e){} }
-  ytSyncDock();
-}
-(function(){
-  var b = document.getElementById("ytDockNext");
-  if (b) b.addEventListener("click", function(){ MUSIC.unlocked = true; radioNextTrack(); });
-})();
-
-/* ---------- YouTube dock: drag to move + corner resize ----------
-   The dock is a floating player, so it can be dragged anywhere by
-   its top handle and resized from its bottom-right grip (16:9 is
-   kept — the frame follows the dock width). Position and size are
-   remembered per device in localStorage, like the other radio
-   settings. Dragging/resizing never recreates the player: only the
-   dock's CSS box moves, and the player is re-sized in place with
-   player.setSize() (which does not reload the video), so playback
-   is never paused or restarted by a move. Double-tap / double-click
-   on the handle resets to the default bottom-centre spot. */
-var YT_DOCK_LS_KEY = "dicechess-ytdock-layout-v1";
-var YT_DOCK_MIN_W = 240;
-function ytDockViewport(){
-  return { w: window.innerWidth || document.documentElement.clientWidth || 360,
-           h: window.innerHeight || document.documentElement.clientHeight || 640 };
-}
-function ytDockClampPos(x, y, w, h){
-  var vp = ytDockViewport(), pad = 8;
-  var maxX = Math.max(pad, vp.w - w - pad);
-  var maxY = Math.max(pad, vp.h - h - pad);
-  return { x: Math.min(Math.max(pad, x), maxX), y: Math.min(Math.max(pad, y), maxY) };
-}
-function ytDockMaxWidth(curW, curH){
-  var vp = ytDockViewport();
-  var maxByVw = vp.w * 0.94;
-  var ratio = (curW && curH) ? (curW / curH) : 1.55;
-  var maxByVh = vp.h * 0.70 * ratio;
-  var m = Math.min(maxByVw, maxByVh);
-  if (m < YT_DOCK_MIN_W) m = Math.min(maxByVw, YT_DOCK_MIN_W);
-  return Math.max(160, m);
-}
-function ytDockSyncPlayerSize(){
-  try{
-    if (YT_EMBED.ready && YT_EMBED.player && typeof YT_EMBED.player.setSize === "function"){
-      var f = document.querySelector("#ytDock .ytdock-frame");
-      if (f && f.clientWidth && f.clientHeight) YT_EMBED.player.setSize(f.clientWidth, f.clientHeight);
-    }
-  }catch(e){}
-}
-function ytDockSaveLayout(){
-  try{
-    var dock = document.getElementById("ytDock"); if (!dock || !dock.classList.contains("has-pos")) return;
-    var r = dock.getBoundingClientRect(); if (!r.width) return;
-    localStorage.setItem(YT_DOCK_LS_KEY, JSON.stringify({ x: Math.round(r.left), y: Math.round(r.top), w: Math.round(r.width) }));
-  }catch(e){}
-}
-function ytDockLoadLayout(){
-  try{
-    var raw = localStorage.getItem(YT_DOCK_LS_KEY); if (!raw) return null;
-    var o = JSON.parse(raw);
-    if (!o || typeof o.x !== "number" || typeof o.y !== "number" || typeof o.w !== "number") return null;
-    if (!isFinite(o.x) || !isFinite(o.y) || !isFinite(o.w)) return null;
-    return o;
-  }catch(e){ return null; }
-}
-function ytDockClampToViewport(){
-  var dock = document.getElementById("ytDock"); if (!dock || !dock.classList.contains("has-pos")) return;
-  var r = dock.getBoundingClientRect(); if (!r.width || !r.height) return;
-  var maxW = ytDockMaxWidth(r.width, r.height), shrunk = false;
-  if (r.width > maxW){ dock.style.width = Math.round(maxW) + "px"; r = dock.getBoundingClientRect(); shrunk = true; }
-  var c = ytDockClampPos(r.left, r.top, r.width, r.height);
-  dock.style.left = c.x + "px"; dock.style.top = c.y + "px";
-  if (shrunk) ytDockSyncPlayerSize();
-}
-function ytDockRestoreLayout(){
-  var dock = document.getElementById("ytDock"); if (!dock) return;
-  var saved = ytDockLoadLayout(); if (!saved) return;
-  var vp = ytDockViewport();
-  var w = Math.min(Math.max(YT_DOCK_MIN_W, saved.w), Math.max(160, vp.w * 0.94));
-  dock.classList.add("has-pos");
-  dock.style.width = Math.round(w) + "px";
-  dock.style.left = Math.round(saved.x) + "px";
-  dock.style.top = Math.round(saved.y) + "px";
-  dock.style.bottom = "auto";
-  dock.style.transform = "none";
-  ytDockClampToViewport();
-  ytDockSyncPlayerSize();
-}
-function ytDockResetLayout(){
-  try{ localStorage.removeItem(YT_DOCK_LS_KEY); }catch(e){}
-  var dock = document.getElementById("ytDock"); if (!dock) return;
-  dock.classList.remove("has-pos");
-  dock.style.left = ""; dock.style.top = ""; dock.style.bottom = ""; dock.style.width = ""; dock.style.transform = "";
-  ytDockSyncPlayerSize();
-}
-function ytDockEnsureExplicitPos(){
-  var dock = document.getElementById("ytDock"); if (!dock || dock.classList.contains("has-pos")) return;
-  var r = dock.getBoundingClientRect(); if (!r.width) return;
-  dock.classList.add("has-pos");
-  dock.style.width = Math.round(r.width) + "px";
-  dock.style.left = Math.round(r.left) + "px";
-  dock.style.top = Math.round(r.top) + "px";
-  dock.style.bottom = "auto";
-  dock.style.transform = "none";
-}
-(function initYtDockMoveResize(){
-  var dock = document.getElementById("ytDock");
-  var handle = document.getElementById("ytDockDrag");
-  var grip = document.getElementById("ytDockResize");
-  if (!dock || !handle) return;
-  ytDockRestoreLayout();
-  handle.addEventListener("dblclick", function(e){ e.preventDefault(); ytDockResetLayout(); });
-  var drag = null, resize = null, lastTapAt = 0;
-  /* ----- drag to move (top handle) ----- */
-  handle.addEventListener("pointerdown", function(e){
-    if (drag) return;
-    if (e.pointerType === "mouse" && e.button !== 0) return;
-    ytDockEnsureExplicitPos();
-    var r = dock.getBoundingClientRect(); if (!r.width) return;
-    drag = { id: e.pointerId, sx: e.clientX, sy: e.clientY, lx: r.left, ly: r.top, w: r.width, h: r.height, moved: false, t0: Date.now() };
-    try{ handle.setPointerCapture(e.pointerId); }catch(err){}
-    dock.classList.add("is-dragging");
-    e.preventDefault();
-  });
-  handle.addEventListener("pointermove", function(e){
-    if (!drag || e.pointerId !== drag.id) return;
-    var dx = e.clientX - drag.sx, dy = e.clientY - drag.sy;
-    if (Math.abs(dx) + Math.abs(dy) > 3) drag.moved = true;
-    var c = ytDockClampPos(drag.lx + dx, drag.ly + dy, drag.w, drag.h);
-    dock.style.left = c.x + "px"; dock.style.top = c.y + "px";
-    e.preventDefault();
-  });
-  function endDrag(e, cancelled){
-    if (!drag || (e && e.pointerId !== drag.id)) return;
-    var moved = drag.moved, t0 = drag.t0; drag = null;
-    dock.classList.remove("is-dragging");
-    if (moved){ lastTapAt = 0; ytDockSaveLayout(); return; }
-    if (cancelled) return;
-    // A tap (press + release without moving): two in quick succession
-    // count as a double-tap and reset the dock. A second press that
-    // turns into a drag is handled above and never reaches here, so a
-    // quick re-drag right after a tap does not trigger a reset.
-    var now = Date.now();
-    if (now - t0 < 500 && lastTapAt && now - lastTapAt < 400){ lastTapAt = 0; ytDockResetLayout(); }
-    else if (now - t0 < 500){ lastTapAt = now; }
-  }
-  handle.addEventListener("pointerup", function(e){ endDrag(e, false); });
-  handle.addEventListener("pointercancel", function(e){ endDrag(e, true); });
-  /* ----- resize (bottom-right grip, 16:9 kept) ----- */
-  if (grip){
-    grip.addEventListener("click", function(e){ e.preventDefault(); e.stopPropagation(); });
-    grip.addEventListener("pointerdown", function(e){
-      if (resize) return;
-      if (e.pointerType === "mouse" && e.button !== 0) return;
-      ytDockEnsureExplicitPos();
-      var r = dock.getBoundingClientRect(); if (!r.width) return;
-      resize = { id: e.pointerId, sx: e.clientX, sy: e.clientY, lx: r.left, ly: r.top, w: r.width, h: r.height, moved: false };
-      try{ grip.setPointerCapture(e.pointerId); }catch(err){}
-      dock.classList.add("is-resizing");
-      e.preventDefault(); e.stopPropagation();
-    });
-    grip.addEventListener("pointermove", function(e){
-      if (!resize || e.pointerId !== resize.id) return;
-      var dx = e.clientX - resize.sx, dy = e.clientY - resize.sy;
-      if (Math.abs(dx) + Math.abs(dy) > 3) resize.moved = true;
-      var newW;
-      if (Math.abs(dy) > Math.abs(dx)) newW = resize.w + dy * (resize.w / resize.h);
-      else newW = resize.w + dx;
-      var maxW = ytDockMaxWidth(resize.w, resize.h);
-      newW = Math.min(Math.max(YT_DOCK_MIN_W, newW), maxW);
-      if (newW < YT_DOCK_MIN_W) newW = Math.min(YT_DOCK_MIN_W, maxW);
-      dock.style.width = Math.round(newW) + "px";
-      ytDockClampToViewport();
-      e.preventDefault();
-    });
-    function endResize(e){
-      if (!resize || (e && e.pointerId !== resize.id)) return;
-      var moved = resize.moved; resize = null;
-      dock.classList.remove("is-resizing");
-      ytDockSyncPlayerSize();
-      if (moved) ytDockSaveLayout();
-    }
-    grip.addEventListener("pointerup", endResize);
-    grip.addEventListener("pointercancel", endResize);
-  }
-  /* ----- keep the dock reachable if the viewport changes ----- */
-  window.addEventListener("resize", function(){ ytDockClampToViewport(); });
-  window.addEventListener("orientationchange", function(){ setTimeout(function(){ ytDockClampToViewport(); }, 120); });
-})();
-
-/* The House stream: a 9-track playlist. Tracks 1–3 play through one
-   HTMLAudio element; tracks 4–9 play through the YouTube embed above.
-   Tracks play in order; when one ends the next starts, and after the
-   last it wraps back to the first. If an MP3 cannot load (device
-   offline, file missing), the radio tries the next track and only
-   falls back to silence — with a one-time explanation — when every
-   track in a row has failed. */
-var HOUSE = { audio:null, failed:false, noticeShown:false, failStreak:0 };
+/* Both stations play through one shared HTMLAudio element, so
+   switching stations just swaps its src — there is never a second
+   source playing. House is a 3-track playlist: tracks play in order;
+   when one ends the next starts, and after the last it wraps back to
+   the first. If an MP3 cannot load (device offline, file missing),
+   the radio tries the next track and only falls back to silence —
+   with a one-time explanation — when every track in a row has
+   failed. Centreforce 883 is a live stream: it never ends, and if it
+   errors the radio retries the stream once before giving up with a
+   Centreforce-specific explanation. */
+var HOUSE = { audio:null, failed:false, noticeShown:false, failStreak:0, streamRetried:false };
 function houseAudioEl(){
   if (HOUSE.audio) return HOUSE.audio;
   var a = new Audio();
   a.preload = "auto";
-  a.loop = false; // the playlist advances on "ended", then wraps
-  if (houseTrack().url) a.src = houseTrack().url; // the YouTube track has no file URL
+  a.loop = false; // the House playlist advances on "ended", then wraps
+  a.src = radioCurrentSrc();
   a.addEventListener("error", function(){ houseOnError(); });
-  a.addEventListener("ended", function(){ radioNextTrack({ auto:true }); });
-  a.addEventListener("playing", function(){ HOUSE.failStreak = 0; HOUSE.failed = false; });
+  a.addEventListener("ended", function(){ if (MUSIC.station==="house") radioNextTrack({ auto:true }); });
+  a.addEventListener("playing", function(){ HOUSE.failStreak = 0; HOUSE.failed = false; HOUSE.streamRetried = false; });
   HOUSE.audio = a;
   return a;
 }
 function houseOnError(){
+  if (MUSIC.station==="centreforce"){
+    // Live stream: never cycle tracks. Retry the stream once, then
+    // fall back to silence with a Centreforce-specific explanation.
+    if (!HOUSE.streamRetried){
+      HOUSE.streamRetried = true;
+      if (HOUSE.audio){ try{ HOUSE.audio.src = CENTREFORCE_URL; }catch(e){} }
+      radioRenderUI();
+      if (radioShouldPlay()) housePlay();
+      return;
+    }
+    houseFail();
+    return;
+  }
   HOUSE.failStreak = (HOUSE.failStreak || 0) + 1;
   if (HOUSE.failStreak < HOUSE_TRACKS.length){
     HOUSE_TRACK_INDEX = (HOUSE_TRACK_INDEX + 1) % HOUSE_TRACKS.length;
-    if (HOUSE.audio && houseTrack().url){ try{ HOUSE.audio.src = houseTrack().url; }catch(e){} }
+    if (HOUSE.audio){ try{ HOUSE.audio.src = houseTrack().url; }catch(e){} }
     radioRenderUI();
     if (radioShouldPlay()) housePlay();
     return;
@@ -10968,20 +10665,13 @@ function houseOnError(){
 }
 function housePlay(){
   if (HOUSE.failed || !radioShouldPlay()) return;
-  if (isYtTrack(houseTrack())){
-    // YouTube track: silence the MP3 element and play through the
-    // visible embed player instead — nothing is downloaded or hosted.
-    if (HOUSE.audio){ try{ HOUSE.audio.pause(); }catch(e){} }
-    ytPlay();
-    radioRenderUI();
-    return;
-  }
-  ytStop(); // an MP3 is playing: make sure the embed is silent
   try{
     var a = houseAudioEl();
-    if (a.src !== houseTrack().url){ a.src = houseTrack().url; }
+    var want = radioCurrentSrc();
+    var switched = a.src !== want;
+    if (switched){ a.src = want; }
     a.volume = radioVolume();
-    if (a.paused){
+    if (a.paused || switched){
       var pr = a.play();
       if (pr && pr.catch) pr.catch(function(){ houseFail(); });
     }
@@ -10990,13 +10680,23 @@ function housePlay(){
 }
 function radioNextTrack(opts){
   opts = opts || {};
-  var wasYt = isYtTrack(houseTrack());
+  if (MUSIC.station==="centreforce"){
+    // A live stream has no next track: ⏭ reconnects to the stream.
+    HOUSE.failed = false; HOUSE.streamRetried = false;
+    if (HOUSE.audio){
+      try{ HOUSE.audio.pause(); }catch(e){}
+      try{ HOUSE.audio.src = CENTREFORCE_URL; }catch(e){}
+    }
+    radioRenderUI();
+    if (radioShouldPlay()) housePlay();
+    if (!opts.auto) toast("📻 Centreforce 883 — live house");
+    return;
+  }
   HOUSE_TRACK_INDEX = (HOUSE_TRACK_INDEX + 1) % HOUSE_TRACKS.length;
   HOUSE.failed = false;
-  if (wasYt) ytStop(); // leaving the embed track: stop the video so no audio leaks
   if (HOUSE.audio){
     try{ HOUSE.audio.pause(); }catch(e){}
-    if (houseTrack().url){ try{ HOUSE.audio.src = houseTrack().url; }catch(e){} }
+    try{ HOUSE.audio.src = houseTrack().url; }catch(e){}
   }
   radioRenderUI();
   // Keeps playing if the radio is on; if it is off, the tap only
@@ -11006,14 +10706,15 @@ function radioNextTrack(opts){
 }
 function housePause(){
   if (HOUSE.audio){ try{ HOUSE.audio.pause(); }catch(e){} }
-  ytPause();
 }
 function houseFail(){
   HOUSE.failed = true;
   housePause();
   if (!HOUSE.noticeShown){
     HOUSE.noticeShown = true;
-    toast("House needs internet to play its track — check your connection.");
+    toast(MUSIC.station==="centreforce"
+      ? "Centreforce needs internet to play — check your connection."
+      : "House needs internet to play its track — check your connection.");
   }
   radioRenderUI();
 }
@@ -11041,8 +10742,12 @@ function musicSync(){
   if (typeof updateVoiceUI==="function") updateVoiceUI();
   if (typeof vcUpdateUI==="function") vcUpdateUI();
 }
+function radioLabel(){
+  if (MUSIC.station==="centreforce") return "Centreforce 883 · Live";
+  return "House · ♪ " + houseTrackTitle();
+}
 function radioRenderUI(){
-  var name = "House · ♪ " + houseTrackTitle();
+  var name = radioLabel();
   var rn = document.getElementById("radioName");
   if (rn) rn.textContent = MUSIC.station==="off" ? "Radio Off" : name;
   var dot = document.getElementById("radioDot");
@@ -11066,17 +10771,26 @@ function radioRenderUI(){
   var note = document.getElementById("radioPanelNote");
   if (note && document.body.classList.contains("playing")){
     note.textContent = MUSIC.inGameOn
-      ? "Radio is ON in this match — " + name + " plays quietly on loop. It's local only and never affects your friend or the game."
-      : "Radio is OFF in this match (the default). Turn it on above to keep House playing quietly while you play. Purely local — never syncs.";
+      ? "Radio is ON in this match — " + name + " plays quietly. It's local only and never affects your friend or the game."
+      : "Radio is OFF in this match (the default). Turn it on above to keep the radio playing quietly while you play. Purely local — never syncs.";
   }
-  ytSyncDock();
+  var list = document.getElementById("radioStationList");
+  if (list){
+    var btns = list.querySelectorAll("button[data-station]");
+    for (var i=0;i<btns.length;i++){
+      var on = btns[i].getAttribute("data-station")===MUSIC.station;
+      btns[i].classList.toggle("on", on);
+      var d = btns[i].querySelector(".rs-dot");
+      if (d) d.textContent = on ? "ON" : "OFF";
+    }
+  }
 }
 function radioSetStation(id, opts){
   opts = opts || {};
-  id = id==="off" ? "off" : "house"; // one station now: anything else lands on House
+  if (id!=="house" && id!=="centreforce" && id!=="off") id = "house"; // unknown values land on House
   var changed = id !== MUSIC.station;
   MUSIC.station = id;
-  if (id!=="off"){ MUSIC.prevStation = id; HOUSE.failed = false; HOUSE.failStreak = 0; } // a fresh pick retries the stream
+  if (id!=="off"){ MUSIC.prevStation = id; HOUSE.failed = false; HOUSE.failStreak = 0; HOUSE.streamRetried = false; } // a fresh pick retries the source
   MUSIC.on = id!=="off";
   try{ localStorage.setItem("dicechess-radio", id); }catch(e){}
   radioRenderUI();
@@ -11087,12 +10801,13 @@ function radioSetStation(id, opts){
   musicPlay();
 }
 function radioToggleSpeaker(){
-  if (MUSIC.station==="off") radioSetStation("house");
+  if (MUSIC.station==="off") radioSetStation(MUSIC.prevStation || "house");
   else radioSetStation("off");
 }
 function setMusic(on){
-  // Backwards-compatible wrapper (older Settings wiring): on = House, off = silence.
-  if (on){ MUSIC.unlocked = true; radioSetStation("house", { toast:false }); }
+  // Backwards-compatible wrapper (older Settings wiring): on = back to
+  // the last station used, off = silence.
+  if (on){ MUSIC.unlocked = true; radioSetStation(MUSIC.prevStation || "house", { toast:false }); }
   else radioSetStation("off", { toast:false });
 }
 document.addEventListener("pointerdown", function(){
@@ -11110,6 +10825,18 @@ document.addEventListener("pointerdown", function(){
     MUSIC.unlocked = true;
     radioNextTrack();
   });
+  var sl = document.getElementById("radioStationList");
+  if (sl){
+    var sbtns = sl.querySelectorAll("button[data-station]");
+    for (var i=0;i<sbtns.length;i++){
+      (function(btn){
+        btn.addEventListener("click", function(){
+          MUSIC.unlocked = true;
+          radioSetStation(btn.getAttribute("data-station"));
+        });
+      })(sbtns[i]);
+    }
+  }
   var gi = document.getElementById("giRadio");
   if (gi) gi.addEventListener("click", function(){
     if (typeof closePanels==="function") closePanels();
@@ -11119,7 +10846,7 @@ document.addEventListener("pointerdown", function(){
   var ron = document.getElementById("radioInGameOn"), roff = document.getElementById("radioInGameOff");
   if (ron) ron.addEventListener("click", function(){
     MUSIC.inGameOn = true; MUSIC.unlocked = true;
-    if (MUSIC.station==="off") radioSetStation("house", { toast:false });
+    if (MUSIC.station==="off") radioSetStation(MUSIC.prevStation || "house", { toast:false });
     radioRenderUI(); musicPlay();
     toast("📻 " + radioStationName(MUSIC.station) + " — playing quietly in this match");
   });
