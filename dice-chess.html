@@ -6638,18 +6638,99 @@ function sfxNoise(dur, vol, delay, freq){
 }
 /* legacy single-tone helper — now routed through the SFX switch */
 function blip(freq, dur){ sfxTone(freq, dur||0.08, "sine", 0.045); }
-function sfxTap(){ sfxTone(1150, 0.035, "triangle", 0.016); }
-function sfxSelect(){ sfxTone(620, 0.05, "sine", 0.04); }
-function sfxDiceTick(){ sfxNoise(0.03, 0.028, 0, 1500 + Math.random()*900); }
-function sfxDiceSettle(){ sfxNoise(0.05, 0.05, 0, 1100); sfxTone(340, 0.1, "sine", 0.05, 0.01); }
-function sfxMove(){ sfxNoise(0.045, 0.04, 0, 750); sfxTone(215, 0.07, "sine", 0.05, 0, 150); }
-function sfxCapture(){ sfxNoise(0.07, 0.06, 0, 520); sfxTone(150, 0.13, "triangle", 0.07, 0, 82); }
-function sfxCheck(){ sfxTone(196, 0.11, "triangle", 0.055); sfxTone(147, 0.16, "triangle", 0.055, 0.1); }
-function sfxVictory(){ [523,659,784,1047].forEach(function(f,i){ sfxTone(f, 0.16, "triangle", 0.05, i*0.09); }); }
+/* UI taps: sine-based with a soft harmonic on top — rounder than the
+   old bare triangle blip, same low volume class. */
+function sfxTap(){ sfxTone(880, 0.045, "sine", 0.016); sfxTone(1320, 0.03, "sine", 0.007, 0.004); }
+function sfxSelect(){ sfxTone(620, 0.06, "sine", 0.04); sfxTone(930, 0.05, "sine", 0.016, 0.016); }
+/* Dice clatter: p is the roll's progress 0→1 (callers that don't know
+   it get the mid-tumble default). Pitch, brightness and volume wander
+   per tick and build as the tumble peaks, and late in the roll a
+   second, softer knock increasingly trails the main clack — dice
+   bouncing off each other before they settle. */
+function sfxDiceTick(p){
+  var prog = (typeof p==="number" && isFinite(p)) ? Math.max(0, Math.min(1, p)) : 0.5;
+  var vol = 0.015 + prog*0.02 + Math.random()*0.012;
+  sfxNoise(0.028, vol, 0, 1050 + prog*750 + Math.random()*1150);
+  if (Math.random() < 0.22 + prog*0.5) sfxNoise(0.02, vol*0.55, 0.03 + Math.random()*0.035, 850 + Math.random()*1500);
+}
+/* One die landing: a short knock whose pitch steps down per die, so a
+   3–4 die roll lands as distinct knocks, not one thud. delaySec lets
+   the reduced-motion path stagger the set. */
+function sfxDieLand(idx, delaySec){
+  var d = delaySec||0, step = idx||0;
+  sfxNoise(0.04, 0.052, d, 860 + step*150 + Math.random()*170);
+  sfxTone(308 - step*24 + Math.random()*28, 0.09, "sine", 0.048, d + 0.006, 182);
+}
+/* Full-set settle (kept for the shop dice-skin preview fallback):
+   two knocks a beat apart, the second softer. */
+function sfxDiceSettle(){ sfxNoise(0.05, 0.05, 0, 1100); sfxTone(340, 0.1, "sine", 0.05, 0.01); sfxNoise(0.04, 0.028, 0.07, 820); sfxTone(262, 0.08, "sine", 0.032, 0.075, 196); }
+/* Move: a weightier wooden knock — dark contact noise, a body tone
+   that drops as the piece seats, and a low resonance under it. */
+function sfxMove(){
+  sfxNoise(0.05, 0.05, 0, 610);
+  sfxTone(192, 0.09, "sine", 0.075, 0, 128);
+  sfxTone(97, 0.13, "sine", 0.05, 0.004, 68);
+  sfxNoise(0.018, 0.018, 0.01, 2300);
+}
+/* Capture: a sharp crack transient layered over a heavier thud. */
+function sfxCapture(){
+  sfxNoise(0.028, 0.075, 0, 2500);
+  sfxNoise(0.08, 0.06, 0.006, 470);
+  sfxTone(150, 0.14, "triangle", 0.075, 0, 80);
+  sfxTone(92, 0.16, "sine", 0.05, 0.01, 58);
+}
+/* Check: a clearer two-note sting (falling fourth, a sine body under
+   each triangle note) — more present, but short and not alarming. */
+function sfxCheck(){
+  sfxTone(392, 0.1, "triangle", 0.06); sfxTone(392, 0.1, "sine", 0.028);
+  sfxTone(294, 0.17, "triangle", 0.06, 0.1); sfxTone(294, 0.17, "sine", 0.028, 0.1);
+}
+/* Victory: the arpeggio, resolving onto a held C-major chord. */
+function sfxVictory(){
+  [523,659,784,1047].forEach(function(f,i){ sfxTone(f, 0.18, "triangle", 0.05, i*0.09); });
+  [262,523,659,784].forEach(function(f){ sfxTone(f, 0.44, "sine", 0.03, 0.38); });
+}
+/* Defeat: a soft descending motif — quiet, no sting. */
+function sfxDefeat(){
+  [392,330,262].forEach(function(f,i){ sfxTone(f, 0.22, "sine", 0.042, i*0.13); });
+  sfxTone(196, 0.36, "sine", 0.036, 0.4);
+}
+/* Draw: a neutral two-note — the same pitch twice. */
+function sfxDraw(){ sfxTone(330, 0.16, "sine", 0.042); sfxTone(330, 0.26, "sine", 0.042, 0.17); }
+/* Special-dice reveal stings: one short, distinct motif per kind,
+   kept quiet — specials land often. WILD sparkles up, EXTRA zips up
+   in square blips, CAPTURE strikes down, SHIELD hums warm, SWAP
+   swirls upward. */
+function sfxSpecial(kind){
+  if (kind==="WILD"){ sfxTone(659, 0.09, "sine", 0.038); sfxTone(880, 0.09, "sine", 0.038, 0.06); sfxTone(1319, 0.15, "sine", 0.034, 0.12); }
+  else if (kind==="EXTRA"){ sfxTone(988, 0.05, "square", 0.018); sfxTone(1319, 0.05, "square", 0.018, 0.05); sfxTone(1568, 0.1, "square", 0.016, 0.1); sfxNoise(0.05, 0.014, 0, 3300); }
+  else if (kind==="CAPTURE"){ sfxNoise(0.03, 0.05, 0, 2400); sfxTone(523, 0.13, "triangle", 0.044, 0, 185); }
+  else if (kind==="SHIELD"){ sfxTone(330, 0.24, "sine", 0.038); sfxTone(495, 0.24, "sine", 0.028, 0.02); sfxTone(660, 0.2, "sine", 0.018, 0.05); }
+  else if (kind==="SWAP"){ sfxTone(340, 0.17, "triangle", 0.038, 0, 690); sfxNoise(0.08, 0.018, 0.02, 880); sfxNoise(0.08, 0.018, 0.09, 1750); }
+}
+/* Turn chime: a soft two-tone "your move" — fired by the startTurn
+   hook only when the turn passes to the local player. */
+function sfxTurnChime(){ sfxTone(784, 0.12, "sine", 0.03); sfxTone(1047, 0.19, "sine", 0.028, 0.09); }
+/* Turn-clock ticks: the 10-second warning is a single lower, slightly
+   longer tick; the final-seconds ticks keep their original voice. */
+function sfxClockTick(warn){
+  if (warn) sfxTone(740, 0.07, "sine", 0.034);
+  else sfxTone(920, 0.045, "sine", 0.028);
+}
+/* Turn colour seen by the previous startTurn — the turn chime fires
+   only when the turn actually changes hands to the local player. */
+var _kdPrevTurnCol = null;
 /* KING SMASH impact: a much deeper, louder layer over the plain capture
    hit — sub boom, low thud and a bright shatter crackle. All sfx helpers
    already honour the Sound FX toggle via sfxCtx(). */
-function sfxSmash(){ sfxNoise(0.18, 0.12, 0, 260); sfxTone(110, 0.34, "triangle", 0.12, 0, 44); sfxTone(62, 0.42, "sine", 0.09, 0.02, 38); sfxNoise(0.24, 0.06, 0.05, 2600); }
+function sfxSmash(){
+  sfxNoise(0.18, 0.12, 0, 260); sfxTone(110, 0.34, "triangle", 0.12, 0, 44); sfxTone(62, 0.42, "sine", 0.09, 0.02, 38); sfxNoise(0.24, 0.06, 0.05, 2600);
+  /* deeper sub boom under the crash */
+  sfxTone(46, 0.55, "sine", 0.11, 0, 29);
+  /* debris scatter tail: a few short knocks skittering off, each one
+     later and quieter than the last */
+  for (var di=0; di<5; di++) sfxNoise(0.03, 0.034 - di*0.005, 0.15 + di*0.07 + Math.random()*0.045, 1400 + Math.random()*1700);
+}
 function syncSfxUI(){
   document.querySelectorAll("[data-sfx-set]").forEach(function(b){ b.classList.toggle("on", (b.getAttribute("data-sfx-set")==="on")===SFX.on); });
 }
@@ -6719,6 +6800,16 @@ function startTurn(){
   }
   renderBoard();
   if (typeof TUT!=="undefined" && TUT.active) TUT.onTurnStart();
+  /* TURN CHIME: a soft two-tone when the turn passes TO the local
+     player. Only Vs Computer and Live name a single local colour
+     cleanly, so hotseat (both sides are local) and turn-code games
+     stay silent; _kdPrevTurnCol keeps it to one chime per actual
+     change of hands, not per startTurn call. */
+  var kdLocalCol = null;
+  if (G.mode==="ai") kdLocalCol = opp(G.aiColor||"b");
+  else if (G.mode==="live" && (G.myColor==="w" || G.myColor==="b")) kdLocalCol = G.myColor;
+  if (kdLocalCol && G.st.turn===kdLocalCol && _kdPrevTurnCol!==kdLocalCol) sfxTurnChime();
+  _kdPrevTurnCol = G.st.turn;
   if (G.mode==="ai" && G.st.turn===(G.aiColor||"b") && !G.over) later(aiTakeTurn, 900);
 }
 /* ---------- Chaos Fate (start of every 3rd round) ---------- */
@@ -7014,6 +7105,20 @@ function animateDice(cb, predetermined, rollerCol){
       el.classList.add("tumbling");
     });
   }
+  /* Per-die landing knocks on the animated path, timed to each board
+     cube's own tumble (delay idx*55ms + duration 800+idx*50ms, set in
+     the tumble block above): each die knocks as IT lands, not when
+     the tray clock ends. Guarded by rollGen so a superseded roll
+     never knocks late. The reduced-motion path has no tumble — its
+     knocks fire from the settle block below instead. */
+  if (!reduced){
+    faces.forEach(function(_, idx){
+      setTimeout(function(){
+        if (rollGen !== _rollOverlay.gen) return;
+        sfxDieLand(idx);
+      }, 800 + idx*105);
+    });
+  }
   /* Tray face cycling with an eased cadence: quick at first, then
      the interval stretches as the roll settles, so the tray dice
      decelerate instead of stopping dead. The board cubes are NOT
@@ -7030,7 +7135,7 @@ function animateDice(cb, predetermined, rollerCol){
       renderDie(f, i);
       paintDie(dockDice[i], f);
     }
-    sfxDiceTick();
+    sfxDiceTick(ticks / need);
     if (++ticks >= need){
       panelDice.forEach(function(d){ if (d) d.classList.remove("rolling"); });
       dockDice.forEach(function(d){ if (d) d.classList.remove("rolling"); });
@@ -7040,7 +7145,21 @@ function animateDice(cb, predetermined, rollerCol){
         try { rn = playerName(bannerCol); } catch(e) { rn = ""; }
         banner.textContent = (rn ? rn + " rolled " : "Rolled ") + faces.map(dieDescribe).join(" · ");
       }
-      sfxDiceSettle();
+      /* Per-die landing knocks, reduced-motion path: no tumble, so
+         the dice land together here, staggered a beat apart. (The
+         animated path scheduled its knocks against the board cubes'
+         tumble timing when the roll started — see above.) */
+      if (reduced){ for (var li=0; li<faces.length; li++) sfxDieLand(li, li*0.055); }
+      /* Special-dice reveal stings: one short motif per special die
+         in the settled roll, staggered so two specials don't blur
+         into one sound. This is the single reveal point for the
+         panel dice, the dock dice and the on-board 3D dice — every
+         roll (local, AI, remote, server) settles through here.
+         Audio is not gated by reduced motion; only visuals are. */
+      faces.forEach(function(f, idx){
+        if (!isSpecialFace(f)) return;
+        setTimeout(function(){ sfxSpecial(f); }, 120 + idx*110);
+      });
       /* EXTRA / WILD landings get a one-shot flourish on the settled
          dice (the board die and its dock mirror): EXTRA sparks gold,
          WILD glows. Pure CSS classes, fire-and-forget — the settle
@@ -7311,7 +7430,7 @@ function endTurnManually(){
    renders the countdown, and only the active player's own
    client fires the forced pass (client-enforced beta).
    ============================================================ */
-var TT = { sig: null, epoch: 0, remaining: 60000, deadline: 0, counting: false, lastWhole: -1, lastTickSfx: -1, firedSig: null };
+var TT = { sig: null, epoch: 0, remaining: 60000, deadline: 0, counting: false, lastWhole: -1, lastTickSfx: -1, warned10: false, firedSig: null };
 function ttTurnSig(){ return G.st.turn + "|" + G.log.length + "|" + TT.epoch; }
 function ttTimerApplies(){
   if (!G.timerSec || G.timerSec <= 0) return false;
@@ -7387,7 +7506,7 @@ function ttTick(){
     TT.sig = sig;
     TT.remaining = G.timerSec * 1000;
     TT.counting = false;
-    TT.lastWhole = -1; TT.lastTickSfx = -1;
+    TT.lastWhole = -1; TT.lastTickSfx = -1; TT.warned10 = false;
   }
   var shouldCount = G.phase === "await-move" && !ttPaused() && TT.firedSig !== sig;
   var now = Date.now();
@@ -7405,11 +7524,18 @@ function ttTick(){
       TT.lastWhole = whole;
       ttPaint();
     }
+    // one soft warning tick the first time the clock drops to 10
+    // seconds this turn — same ttCanFire gate as the ticks below, so
+    // it only ever sounds on the client whose player is on the clock
+    if (whole <= 10 && whole > 5 && !TT.warned10 && ttCanFire()){
+      TT.warned10 = true;
+      try{ sfxClockTick(true); }catch(e){}
+    }
     // soft ticks in the final 5 seconds — only on the client whose
     // player is actually on the clock and would fire the pass
     if (whole <= 5 && whole >= 1 && whole !== TT.lastTickSfx && ttCanFire()){
       TT.lastTickSfx = whole;
-      try{ sfxTone(920, 0.045, "sine", 0.028); }catch(e){}
+      try{ sfxClockTick(false); }catch(e){}
     }
     if (TT.remaining <= 0){
       TT.remaining = 0;
@@ -7423,7 +7549,7 @@ function ttTick(){
 }
 setInterval(ttTick, 200);
 function ttResetClock(){
-  TT.sig = null; TT.counting = false; TT.firedSig = null; TT.lastWhole = -1; TT.lastTickSfx = -1;
+  TT.sig = null; TT.counting = false; TT.firedSig = null; TT.lastWhole = -1; TT.lastTickSfx = -1; TT.warned10 = false;
   TT.remaining = (G.timerSec || 60) * 1000;
 }
 function ttAdoptTimer(sec, resetClock){
@@ -7979,7 +8105,13 @@ function showGameOver(title, msg){
   box.innerHTML="";
   box.classList.toggle("victory", G.winner==="w" || G.winner==="b");
   if (G.winner==="w" || G.winner==="b"){
-    sfxVictory();
+    /* Win vs loss is judged against the LOCAL player's colour where
+       the mode names one (Vs Computer, Live incl. server rooms);
+       hotseat and turn-code games keep the plain victory fanfare. */
+    var kdLocalCol2 = null;
+    if (G.mode==="ai") kdLocalCol2 = opp(G.aiColor||"b");
+    else if (G.mode==="live" && (G.myColor==="w" || G.myColor==="b")) kdLocalCol2 = G.myColor;
+    if (kdLocalCol2 && G.winner!==kdLocalCol2) sfxDefeat(); else sfxVictory();
     // confetti-lite burst — skipped entirely under reduced motion
     var reducedFx = document.documentElement.classList.contains("reduce-motion") || (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
     if (!reducedFx){
@@ -7997,6 +8129,7 @@ function showGameOver(title, msg){
       box.appendChild(burst);
     }
   }
+  else if (G.winner==="draw"){ sfxDraw(); }
   var big=document.createElement("div"); big.className="big"; big.textContent = G.winner==="draw" ? "½–½" : "♚";
   var h=document.createElement("h2"); h.textContent=title;
   var p=document.createElement("p"); p.textContent=msg;
@@ -8150,6 +8283,7 @@ function kdComboTierForCapture(atkPc){
 }
 function sfxComboCapture(tier){
   var m = 1 + Math.min(Math.max(tier - 1, 1), 4) * 0.22;
+  sfxNoise(0.028, 0.07, 0, Math.round(2500 * m)); /* crack transient over the thud, scaled with tier like the rest */
   sfxNoise(0.08, 0.07, 0, Math.round(520 * m));
   sfxTone(Math.round(150 * m), 0.13, "triangle", 0.075, 0, Math.round(82 * m));
   if (tier >= 3) sfxTone(Math.round(310 * m), 0.1, "square", 0.028, 0.02);
